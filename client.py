@@ -26,7 +26,7 @@ class Client():
         body = {
             'planets': planets,
         }
-        return requests.post(url=url, data=body, headers=self._auth_header)
+        return requests.post(url=url, json=body, headers=self._auth_header)
 
     def post_collect(self, garbage: tp.Dict[str, tp.List[tp.Tuple[int, int]]]):
         uri = '/player/collect'
@@ -34,7 +34,7 @@ class Client():
         body = {
             'garbage': garbage,
         }
-        return requests.post(url=url, data=body, headers=self._auth_header)
+        return requests.post(url=url, json=body, headers=self._auth_header)
 
     def delete_reset(self):
         uri = '/player/reset'
@@ -42,6 +42,6 @@ class Client():
         return requests.delete(url=url, headers=self._auth_header)
 
     def get_rounds(self):
-        uri = '/player/reset'
+        uri = '/player/rounds'
         url = self._host + uri
         return requests.get(url=url, headers=self._auth_header)

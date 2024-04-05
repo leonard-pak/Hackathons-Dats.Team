@@ -3,15 +3,17 @@ import client
 
 def send_request(client: client.Client):
 
-    return client.get_universe()
+    # return client.get_universe()
 
-    # return client.post_travel(planets=)
+    planets = ['Moen']
+    # return client.post_travel(planets=planets)
 
-    # return client.post_collect(garbage=)
+    garbage = {}
+    # return client.post_collect(garbage=garbage)
 
     # return client.delete_reset()
 
-    # return client.get_rounds()
+    return client.get_rounds()
 
 
 if __name__ == '__main__':
