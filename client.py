@@ -7,6 +7,8 @@ import requests
 import typing as tp
 from time import time, sleep
 
+from mock import collect_mock, universe_mock
+
 dotenv.load_dotenv()
 logger = logging.getLogger(__name__)
 
@@ -24,6 +26,7 @@ class Client():
         self._period_call = period_call
 
     def get_universe(self):
+        # return universe_mock
         uri = '/player/universe'
         url = self._host + uri
         response = self.__request(Method.GET, url=url)
@@ -39,6 +42,7 @@ class Client():
         return json.loads(response.text)
 
     def post_collect(self, garbage: tp.Dict[str, tp.List[tp.Tuple[int, int]]]):
+        # return collect_mock
         uri = '/player/collect'
         url = self._host + uri
         body = {
