@@ -28,9 +28,8 @@ def solution(client: client.Client):
         collectGarbage: tp.List[GarbageItem] = [] # TODO
 
         res_collect = client.post_collect({g.name: g.form for g in collectGarbage})
-        planetGarbages = GarbageItem.createList(res_collect['leaved']) # TODO
 
-        if len(planetGarbages) == 0:
+        if len(res_collect['leaved']) == 0:
             cleaned_planets.add(target_planet)
             queue.extend(unvs.get_all_neighbors(target_planet))
         else:
