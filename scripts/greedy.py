@@ -1,17 +1,16 @@
 import client
-from garbage import GarbageItem
+from garbage import GarbageItem, GarbageItemT
 from map import Universe
 from collections import deque
-
+import typing as tp
 from ship import Ship
 
 def solution(client: client.Client):
     res_universe = client.get_universe()
     unvs = Universe.create(res_universe['universe'])
-    ship = Ship.create(res_universe['ship'])
+    # ship = Ship.create(res_universe['ship'])
 
-    neigs = unvs.get_all_neighbors(unvs.HOME)
-    queue = deque(neigs)
+    queue = deque(unvs.get_all_neighbors(unvs.HOME))
     cur_planet = unvs.HOME
     path = []
     while len(queue) != 0:
@@ -19,11 +18,18 @@ def solution(client: client.Client):
 
         path.extend(unvs.get_path(cur_planet, target_planet))
         res_travel = client.post_travel(path)
-        garbages = GarbageItem.createList(res_travel['planetGarbage'])
         cur_planet = target_planet
 
-        # take garbage
-        # if planet not clear, return to queue to begin, else add all neighbors to end
+        planetGarbages = GarbageItem.createList(res_travel['planetGarbage'])
+        collectGarbage: tp.List[GarbageItem] # = TODO
+
+        res_collect = client.post_collect({g.name: g.form for g in collectGarbage})
+        planetGarbages = GarbageItem.createList(res_collect['leaved'])
+
+        if len(planetGarbages) == 0:
+            queue.extend(unvs.get_all_neighbors(target_planet))
+        else:
+            queue.appendleft(target_planet)
 
         path = unvs.get_path(cur_planet, unvs.RECUCLER)
 
