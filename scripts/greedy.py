@@ -6,6 +6,7 @@ import typing as tp
 from ship import Ship
 import packing
 
+# import plotly.express as px
 
 def solution(client: client.Client):
     res_universe = client.get_universe()
@@ -25,7 +26,10 @@ def solution(client: client.Client):
         res_travel = client.post_travel(path)
         cur_planet = target_planet
         planetGarbages = GarbageItem.createList(res_travel['planetGarbage'])
-        collectGarbage: tp.List[GarbageItem] = packing.optimal_packing(ship.storage.capacity_x, ship.storage.capacity_y, planetGarbages)
+
+        packager = packing.Packager(ship.storage.capacity_x, ship.storage.capacity_y, planetGarbages)
+        collectGarbage = packager.iterate_over_packing(25)
+        # break
 
         res_collect = client.post_collect({g.name: g.form for g in collectGarbage})
 
@@ -37,6 +41,11 @@ def solution(client: client.Client):
         path = unvs.get_path(cur_planet, unvs.RECUCLER)
 
     client.post_travel(path)
+
+    # packager.occupancy_map[packager.occupancy_map == 0] -= 5
+    # fig = px.imshow(packager.occupancy_map, color_continuous_scale='Jet', origin='lower')
+    # fig.show()
+
 
 if __name__ == '__main__':
     game_client = client.Client()

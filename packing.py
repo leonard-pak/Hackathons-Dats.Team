@@ -5,15 +5,24 @@ import numpy as np
 import garbage
 
 
-ACTION_STEPS = [
-    [-1, -1],
-    [-1, 0],
-    [0, -1],
-    [1, -1],
-]
+ACTION_STEPS = []
+for dy in range(-11, 1):
+    for dx in range(-8, 1):
+        ACTION_STEPS.append((dy, dx))
 
 
-def _index_figure(figure):
+def _garbage_to_figure(garbage_item: garbage.GarbageItem):
+    return np.flip(garbage_item.form)
+
+
+def _figure_to_garbage(name: str, figure) -> garbage.GarbageItem:
+    figure = np.flip(figure)
+    form: garbage.GarbageItemT = [tuple(coord) for coord in figure]
+    return garbage.GarbageItem(name, form)
+
+
+def _index_figure(garbage_item: garbage.GarbageItem):
+    figure = _garbage_to_figure(garbage_item)
     return figure[:, 0], figure[:, 1]
 
 
@@ -32,8 +41,9 @@ def _calc_figure_bbox_area(figure) -> int:
     return np.prod(figure.max(axis=0) - figure.min(axis=0) + 1)
 
 
-def _sort_function(figure) -> tp.Tuple[int, int]:
+def _sort_function(garbage_item: garbage.GarbageItem) -> tp.Tuple[int, int]:
     # returns (Free space, Area)
+    figure = _garbage_to_figure(garbage_item)
     area = _calc_figure_area(figure)
     bbox_area = _calc_figure_bbox_area(figure)
     return (bbox_area - area, area)
@@ -44,35 +54,37 @@ class Packager():
         self.capacity_x = capacity_x
         self.capacity_y = capacity_y
 
-        self.occupancy_map = self._calc_occupancy_map()
-        self.distance_map = self._calc_distance_map()
-
         self.garbage_list = self._sort_garbages(garbage_list)
         self.packed_garbages: tp.List[garbage.GarbageItem] = []
 
-    def _pack_garbage(self, garbage: garbage.GarbageItem):
-        self.packed_garbages.append(garbage)
-        self.garbage_list.remove(garbage)
+        self.occupancy_map = self._calc_occupancy_map()
+        self.distance_map = self._calc_distance_map()
+
+    def _pack_garbage(self, garbage_item: garbage.GarbageItem):
+        self.packed_garbages.append(garbage_item)
+        for garbage_ in self.garbage_list:
+            if garbage_.name == garbage_item:
+                self.garbage_list.remove(garbage_)
 
         self.occupancy_map = self._calc_occupancy_map()
         self.distance_map = self._calc_distance_map()
 
     def _calc_occupancy_map(self):
         occupancy_map = np.zeros(self.capacity_x * self.capacity_y).reshape(self.capacity_y, self.capacity_x).astype(np.int_)
-        for garbage in self.packed_garbages:
-            occupancy_map[_index_figure(garbage)] = 1
+        for idx, garbage_item in enumerate(self.packed_garbages, start=1):
+            occupancy_map[_index_figure(garbage_item)] += idx
         return occupancy_map
 
     def _calc_distance_map(self):
         distance_map = np.zeros_like(self.occupancy_map)
         for dy in range(self.capacity_y):
             for dx in range(self.capacity_x):
-                if self.occupancy_map[dy, dx] == 1:
+                if self.occupancy_map[dy, dx] > 0:
                     continue
                 distance_map[dy, dx] = min(
                     distance_map[dy - 1, dx] + 1,
                     distance_map[dy, dx - 1] + 1,
-                )
+                ) + dx + dy
         return distance_map
 
     def _move_to_corner(self, figure):
@@ -82,7 +94,7 @@ class Packager():
         for coord_y, coord_x in figure:
             if not 0 <= coord_y < self.capacity_y or not 0 <= coord_x < self.capacity_x:
                 return False
-            if self.occupancy_map[coord_y, coord_x] == 1:
+            if self.occupancy_map[coord_y, coord_x] > 0:
                 return False
         return True
 
@@ -103,7 +115,7 @@ class Packager():
                 if not self._is_valid_position(possible_pos):
                     continue
                 possible_cost = self._calc_figure_cost(possible_pos)
-                if possible_cost <= optimal_cost:
+                if possible_cost < optimal_cost:
                     optimal_step = step
                     optimal_cost = possible_cost
 
@@ -137,13 +149,28 @@ class Packager():
         return sorted(garbage_list, key=_sort_function)
 
     def pack_garbages(self) -> tp.List[garbage.GarbageItem]:
-        for garbage in self.garbage_list:
-            packager_coords = np.flip(garbage.form)
-            optimal_pos = self._find_optimal_pos(packager_coords)
+        for garbage_item in self.garbage_list:
+            figure = _garbage_to_figure(garbage_item)
+            optimal_pos = self._find_optimal_pos(figure)
             if optimal_pos is None:
                 continue
 
-            self._pack_garbage(garbage)
+            self._pack_garbage(_figure_to_garbage(garbage_item.name, optimal_pos))
+
+        return self.packed_garbages
+
+    def iterate_over_packing(self, iteration_limit: int) -> tp.List[garbage.GarbageItem]:
+        iterations = 0
+        prev_load = np.sum(self.occupancy_map > 0)
+        while iterations < iteration_limit:
+            iterations += 1
+            self.pack_garbages()
+
+            new_load = np.sum(self.occupancy_map > 0)
+            print(f'Iter: {iterations} | Load share: {new_load / self.occupancy_map.size * 100:.2f}%')
+            if new_load == prev_load:
+                break
+            prev_load = new_load
 
         return self.packed_garbages
 

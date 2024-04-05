@@ -7,7 +7,7 @@ import requests
 import typing as tp
 from time import time, sleep
 
-from mock import collect_mock, universe_mock
+from mock import collect_mock, universe_mock, travel_mock
 
 dotenv.load_dotenv()
 logger = logging.getLogger(__name__)
@@ -33,6 +33,7 @@ class Client():
         return json.loads(response.text)
 
     def post_travel(self, planets: tp.List[str]):
+        # return travel_mock
         uri = '/player/travel'
         url = self._host + uri
         body = {
