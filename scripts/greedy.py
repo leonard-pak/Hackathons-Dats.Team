@@ -5,10 +5,14 @@ from collections import deque
 import typing as tp
 from ship import Ship
 import packing
+import time
 
 # import plotly.express as px
 
 def solution(client: client.Client):
+    start = time.time()
+    cycle_number = 0
+
     res_universe = client.get_universe()
     unvs = Universe.create(res_universe['universe'])
     ship = Ship.create(res_universe['ship'])
@@ -18,6 +22,9 @@ def solution(client: client.Client):
     path = []
     cleaned_planets: tp.Set[str] = {unvs.HOME}
     while len(queue) != 0:
+        cycle_start = time.time()
+        cycle_number += 1
+
         target_planet = queue.popleft()
         if target_planet in cleaned_planets:
             continue
@@ -39,6 +46,9 @@ def solution(client: client.Client):
         else:
             queue.appendleft(target_planet)
         path = unvs.get_path(cur_planet, unvs.RECUCLER)
+
+        cycle_end = time.time()
+        print(f'Cycle {cycle_number} | Cycle time: {cycle_end - cycle_start:.2f}s. | Total elapsed time: {cycle_end - start:.2f}s.')
 
     client.post_travel(path)
 
