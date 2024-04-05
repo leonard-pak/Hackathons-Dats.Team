@@ -20,7 +20,7 @@ class Universe:
 
     @classmethod
     def create(cls, record) -> 'Universe':
-        links: tp.List[Link] = [Link(l[0], l[1], l[2]) for l in record['universe']]
+        links: tp.List[Link] = [Link(l[0], l[1], l[2]) for l in record]
         return cls(links)
 
     def update_cost(self, src: str, dest: str):

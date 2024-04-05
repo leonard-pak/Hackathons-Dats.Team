@@ -5,7 +5,7 @@ from ship import Ship
 
 def send_request(client: client.Client):
 
-    # return Universe.from_dict(client.get_universe()).get_path("Earth", 'Mraz')
+    # return Universe.create(client.get_universe()['universe'])
     # return client.get_universe()
 
     # planets = Universe.create(client.get_universe()).get_path("Earth", 'Mraz')
@@ -16,7 +16,7 @@ def send_request(client: client.Client):
 
     # return client.delete_reset()
 
-    return Ship.create(client.get_universe())
+    return Ship.create(client.get_universe()['ship'])
 
     return client.get_rounds()
 

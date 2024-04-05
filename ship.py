@@ -1,13 +1,6 @@
 import typing as tp
 
-
-GarbageItemT = tp.List[tp.Tuple[int, int]]
-
-class GarbageItem():
-    def __init__(self, name: str, form: GarbageItemT) -> None:
-        self.name = name
-        self.form = form
-
+from garbage import GarbageItem
 
 class Storage():
     def __init__(self, capacity_x: int, capacity_y: int, garbage_items: tp.List[GarbageItem]) -> None:
@@ -15,19 +8,20 @@ class Storage():
         self.capacity_y = capacity_y
         self.garbage_items = garbage_items
 
+    @classmethod
+    def create(cls, record) -> 'Storage':
+        garbages = GarbageItem.createList(record['garbage'])
+        return cls(record['capacityX'], record['capacityY'], garbages)
 
 class Ship():
-    def __init__(self, capacity_x: int, capacity_y: int, fuel_used: int, storage: Storage) -> None:
-        self.capacity_x = capacity_x
-        self.capacity_y = capacity_y
+    def __init__(self, fuel_used: int, storage: Storage) -> None:
         self.fuel_used = fuel_used
         self.storage = storage
 
     @classmethod
     def create(cls, record) -> 'Ship':
-        garbages = [GarbageItem(name, [(point[0], point[1]) for point in form]) for [name, form] in record['ship']['garbage']]
-        storage = Storage(record['ship']['capacityX'], record['ship']['capacityY'], garbages)
-        return cls(record['ship']['capacityX'], record['ship']['capacityY'], record['ship']['fuelUsed'], storage)
+        storage = Storage.create(record)
+        return cls(record['fuelUsed'], storage)
 
     def update(self):
         ...
