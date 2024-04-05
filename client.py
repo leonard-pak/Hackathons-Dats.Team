@@ -1,4 +1,5 @@
 import dotenv
+import json
 import logging
 import os
 import requests
@@ -18,7 +19,8 @@ class Client():
     def get_universe(self):
         uri = '/player/universe'
         url = self._host + uri
-        return requests.get(url=url, headers=self._auth_header)
+        response = requests.get(url=url, headers=self._auth_header)
+        return json.loads(response.text)
 
     def post_travel(self, planets: tp.List[str]):
         uri = '/player/travel'
@@ -26,7 +28,8 @@ class Client():
         body = {
             'planets': planets,
         }
-        return requests.post(url=url, json=body, headers=self._auth_header)
+        response = requests.post(url=url, json=body, headers=self._auth_header)
+        return json.loads(response.text)
 
     def post_collect(self, garbage: tp.Dict[str, tp.List[tp.Tuple[int, int]]]):
         uri = '/player/collect'
@@ -34,14 +37,17 @@ class Client():
         body = {
             'garbage': garbage,
         }
-        return requests.post(url=url, json=body, headers=self._auth_header)
+        response = requests.post(url=url, json=body, headers=self._auth_header)
+        return json.loads(response.text)
 
     def delete_reset(self):
         uri = '/player/reset'
         url = self._host + uri
-        return requests.delete(url=url, headers=self._auth_header)
+        response = requests.delete(url=url, headers=self._auth_header)
+        return json.loads(response.text)
 
     def get_rounds(self):
         uri = '/player/rounds'
         url = self._host + uri
-        return requests.get(url=url, headers=self._auth_header)
+        response = requests.get(url=url, headers=self._auth_header)
+        return json.loads(response.text)
