@@ -10,15 +10,16 @@ class Link:
 
 
 class Universe:
-    def __init__(self, links: tp.List[Link], fee = 10, startPlanet = 'Earth') -> None:
+    def __init__(self, links: tp.List[Link], fee = 10, startPlanet = 'Earth', recycler = 'Eden') -> None:
         self.FEE = fee
         self.HOME = startPlanet
+        self.RECUCLER = recycler
         self.map: tp.Dict[tp.Dict[int]] = {link.src: {} for link in links}
         for link in links:
             self.map[link.src][link.dest] = link.fuel
 
     @classmethod
-    def from_dict(cls, record) -> 'Universe':
+    def create(cls, record) -> 'Universe':
         links: tp.List[Link] = [Link(l[0], l[1], l[2]) for l in record['universe']]
         return cls(links)
 
