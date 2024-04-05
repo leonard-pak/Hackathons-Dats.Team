@@ -8,5 +8,5 @@ class GarbageItem():
         self.form = form
 
     @classmethod
-    def createList(cls, record):
-        return [cls(name, [(point[0], point[1]) for point in form]) for [name, form] in record]
+    def createList(cls, record) -> tp.List['GarbageItem']:
+        return [cls(name, [tuple(point) for point in form]) for [name, form] in record]

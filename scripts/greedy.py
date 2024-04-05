@@ -1,16 +1,16 @@
 import client
-from garbage import GarbageItem, GarbageItemT
+from garbage import GarbageItem
 from map import Universe
 from collections import deque
 import typing as tp
 from ship import Ship
+import packing
 
-from time import sleep, time
 
 def solution(client: client.Client):
     res_universe = client.get_universe()
     unvs = Universe.create(res_universe['universe'])
-    # ship = Ship.create(res_universe['ship'])
+    ship = Ship.create(res_universe['ship'])
 
     queue = deque(unvs.get_all_neighbors(unvs.HOME))
     cur_planet = unvs.HOME
@@ -25,7 +25,7 @@ def solution(client: client.Client):
         res_travel = client.post_travel(path)
         cur_planet = target_planet
         planetGarbages = GarbageItem.createList(res_travel['planetGarbage'])
-        collectGarbage: tp.List[GarbageItem] = [] # TODO
+        collectGarbage: tp.List[GarbageItem] = packing.optimal_packing(ship.storage.capacity_x, ship.storage.capacity_y, planetGarbages)
 
         res_collect = client.post_collect({g.name: g.form for g in collectGarbage})
 
