@@ -1,12 +1,14 @@
 import client
+from map import Universe
 
 
 def send_request(client: client.Client):
 
+    # return Universe.from_dict(client.get_universe()).get_path("Earth", 'Mraz')
     # return client.get_universe()
 
-    planets = ['Moen']
-    # return client.post_travel(planets=planets)
+    planets = Universe.from_dict(client.get_universe()).get_path("Earth", 'Mraz')
+    return client.post_travel(planets=planets)
 
     garbage = {}
     # return client.post_collect(garbage=garbage)
@@ -20,5 +22,5 @@ if __name__ == '__main__':
     game_client = client.Client()
     result = send_request(game_client)
     print(result)
-    print(result.status_code)
-    print(result.text)
+    # print(result.status_code)
+    # print(result.text)
