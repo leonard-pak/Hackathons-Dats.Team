@@ -2,8 +2,6 @@ import typing as tp
 
 
 GarbageItemT = tp.List[tp.Tuple[int, int]]
-GarbageT = tp.Dict[str, GarbageItemT]
-
 
 class GarbageItem():
     def __init__(self, name: str, form: GarbageItemT) -> None:
@@ -26,8 +24,10 @@ class Ship():
         self.storage = storage
 
     @classmethod
-    def create(cls, capacity_x: int, capacity_y: int, fuel_used: int, storage: tp.Dict) -> 'Ship':
-        ...
+    def create(cls, record) -> 'Ship':
+        garbages = [GarbageItem(name, [(point[0], point[1]) for point in form]) for [name, form] in record['ship']['garbage']]
+        storage = Storage(record['ship']['capacityX'], record['ship']['capacityY'], garbages)
+        return cls(record['ship']['capacityX'], record['ship']['capacityY'], record['ship']['fuelUsed'], storage)
 
     def update(self):
         ...
