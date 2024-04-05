@@ -1,5 +1,6 @@
 import client
 from map import Universe
+from ship import Ship
 
 
 def send_request(client: client.Client):
@@ -7,13 +8,15 @@ def send_request(client: client.Client):
     # return Universe.from_dict(client.get_universe()).get_path("Earth", 'Mraz')
     # return client.get_universe()
 
-    planets = Universe.from_dict(client.get_universe()).get_path("Earth", 'Mraz')
-    return client.post_travel(planets=planets)
+    # planets = Universe.create(client.get_universe()).get_path("Earth", 'Mraz')
+    # return client.post_travel(planets=planets)
 
     garbage = {}
     # return client.post_collect(garbage=garbage)
 
     # return client.delete_reset()
+
+    return Ship.create(client.get_universe())
 
     return client.get_rounds()
 
