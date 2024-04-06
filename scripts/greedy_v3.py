@@ -47,6 +47,11 @@ def solution(client: client.Client):
 
         path.extend(unvs.get_path(cur_planet, target_planet))
         res_travel = client.post_travel(path)
+        fuel_diff = res_travel['fuelDiff']
+        ship.fuel_used += fuel_diff
+        msg = f'Fuel diff: {fuel_diff} | Total fuel used: {ship.fuel_used}'
+        print(msg)
+        logger.info(msg)
         planetGarbages = GarbageItem.createList(res_travel['planetGarbage'])
         cur_planet = target_planet
         unvs.build_heap(cleaned_planets)
@@ -81,6 +86,11 @@ def solution(client: client.Client):
                 path.remove(item)
 
             res_travel = client.post_travel(local_path)
+            fuel_diff = res_travel['fuelDiff']
+            ship.fuel_used += fuel_diff
+            msg = f'Fuel diff: {fuel_diff} | Total fuel used: {ship.fuel_used}'
+            print(msg)
+            logger.info(msg)
             planetGarbages = GarbageItem.createList(res_travel['planetGarbage'])
 
             if planetGarbages:
@@ -104,8 +114,14 @@ def solution(client: client.Client):
     # packager.occupancy_map[packager.occupancy_map == 0] -= 5
     # fig = px.imshow(packager.occupancy_map, color_continuous_scale='Jet', origin='lower')
     # fig.show()
+
+    res_universe = client.get_universe()
+    fuel_used = res_universe['ship']['fuelUsed']
+
+    print(f'Fuel used: {fuel_used}')
     print(time.time() - start_time)
     print(len(cleaned_planets) == len(unvs.map))
+    logger.info(f'Fuel used: {fuel_used}')
     logger.info(time.time() - start_time)
     logger.info(len(cleaned_planets) == len(unvs.map))
 

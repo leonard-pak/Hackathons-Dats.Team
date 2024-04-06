@@ -159,7 +159,7 @@ class Packager():
         return optimal_pos
 
     def _sort_garbages(self, garbage_list: tp.List[garbage.GarbageItem]) -> tp.List[garbage.GarbageItem]:
-        return sorted(garbage_list, key=_sort_function)
+        return sorted(garbage_list, key=_sort_function, reverse=True)
 
     def pack_garbages(self) -> tp.List[garbage.GarbageItem]:
         for garbage_item in self.garbage_list:

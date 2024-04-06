@@ -156,5 +156,5 @@ class Universe:
                 cost += self.map[path[i]][path[i + 1]]
             cost += self.map[planet][path[0]]
 
-            self._pq.append((cost, planet))
+            self._pq.append((1000 / cost, planet))
         heapify(self._pq)

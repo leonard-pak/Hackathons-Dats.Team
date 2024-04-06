@@ -19,7 +19,7 @@ def send_request(client: client.Client):
 
     # return Ship.create(client.get_universe()['ship'])
 
-    return client.get_rounds()
+    # return client.get_rounds()
 
 
 if __name__ == '__main__':
