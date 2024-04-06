@@ -63,8 +63,9 @@ class Packager():
     def _pack_garbage(self, garbage_item: garbage.GarbageItem):
         self.packed_garbages.append(garbage_item)
         for garbage_ in self.garbage_list:
-            if garbage_.name == garbage_item:
+            if garbage_.name == garbage_item.name:
                 self.garbage_list.remove(garbage_)
+                break
 
         self.occupancy_map = self._calc_occupancy_map()
         self.distance_map = self._calc_distance_map()
