@@ -4,6 +4,19 @@ import numpy as np
 
 import garbage
 
+import logging
+import datetime as dt
+
+start_time = dt.datetime.now()
+logging.basicConfig(
+    filename=f'logs/{start_time.strftime("%H-%M-%S")}.log',
+    filemode='a',
+    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+    datefmt='%H:%M:%S',
+    level=logging.DEBUG
+)
+logger = logging.getLogger(__name__)
+
 
 ACTION_STEPS = []
 for dy in range(-11, 1):
@@ -168,7 +181,9 @@ class Packager():
             self.pack_garbages()
 
             new_load = np.sum(self.occupancy_map > 0)
-            print(f'Iter: {iterations} | Load share: {new_load / self.occupancy_map.size * 100:.2f}%')
+            msg = f'Iter: {iterations} | Load share: {new_load / self.occupancy_map.size * 100:.2f}%'
+            print(msg)
+            logger.debug(msg)
             if new_load == prev_load:
                 break
             prev_load = new_load

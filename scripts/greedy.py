@@ -7,6 +7,20 @@ from ship import Ship
 import packing
 import time
 
+import logging
+import datetime as dt
+
+start_time = dt.datetime.now()
+logging.basicConfig(
+    filename=f'logs/{start_time.strftime("%H-%M-%S")}.log',
+    filemode='a',
+    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+    datefmt='%H:%M:%S',
+    level=logging.DEBUG
+)
+logger = logging.getLogger(__name__)
+
+
 # import plotly.express as px
 
 def solution(client: client.Client):
@@ -51,11 +65,13 @@ def solution(client: client.Client):
             queue.appendleft(target_planet)
 
         path = unvs.get_path(cur_planet, unvs.RECUCLER)
-        res_travel = client.post_travel(path)
+        # res_travel = client.post_travel(path)
         cur_planet = unvs.RECUCLER
 
         cycle_end = time.time()
-        print(f'Cycle {cycle_number} | Cycle time: {cycle_end - cycle_start:.2f}s. | Total elapsed time: {cycle_end - start:.2f}s.')
+        msg = f'Cycle {cycle_number} | Cycle time: {cycle_end - cycle_start:.2f}s. | Total elapsed time: {cycle_end - start:.2f}s.'
+        print(msg)
+        logger.info(msg)
 
     # client.post_travel(path)
 
@@ -64,6 +80,8 @@ def solution(client: client.Client):
     # fig.show()
     print(time.time() - start_time)
     print(len(cleaned_planets) == len(unvs.map))
+    logger.info(time.time() - start_time)
+    logger.info(len(cleaned_planets) == len(unvs.map))
 
 
 if __name__ == '__main__':

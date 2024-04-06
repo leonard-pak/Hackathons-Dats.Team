@@ -93,12 +93,19 @@ class Universe:
         return False
 
     def get_path(self, src: str, dest: str):
-        print(f'Find path from {src}, to {dest}')
+        msg = f'Search path from {src}, to {dest}'
+        print(msg)
+        logger.debug(msg)
         if src == dest:
-            return []
-        visited = {planet: False for planet in self.map.keys()}
-        path = self.__find_path(src, visited, dest)
-        path.pop(0) # for dfs
+            path = []
+        else:
+            visited = {planet: False for planet in self.map.keys()}
+            path = self.__find_path(src, visited, dest)
+            path.pop(0) # for dfs
+
+        msg = f'Path: {path}'
+        print(msg)
+        logger.debug(msg)
 
         # path = self.__dijkstra(src, dest)
 
