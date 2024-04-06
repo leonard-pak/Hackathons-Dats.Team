@@ -9,13 +9,13 @@ def send_request(client: client.Client):
     # return client.get_universe()
 
     # planets = Universe.create(client.get_universe()).get_path("Earth", 'Mraz')
-    planets = ['Earth']
-    return client.post_travel(planets=planets)
+    # planets = ['Earth']
+    # return client.post_travel(planets=planets)
 
     garbage = {}
     # return client.post_collect(garbage=garbage)
 
-    # return client.delete_reset()
+    return client.delete_reset()
 
     # return Ship.create(client.get_universe()['ship'])
 

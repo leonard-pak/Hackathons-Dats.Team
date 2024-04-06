@@ -44,7 +44,7 @@ def solution(client: client.Client):
         if target_planet in cleaned_planets:
             continue
 
-        path = unvs.get_path(cur_planet, target_planet)
+        path.extend(unvs.get_path(cur_planet, target_planet))
         res_travel = client.post_travel(path)
         planetGarbages = GarbageItem.createList(res_travel['planetGarbage'])
         cur_planet = target_planet

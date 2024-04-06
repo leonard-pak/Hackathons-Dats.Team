@@ -99,17 +99,19 @@ class Universe:
         if src == dest:
             path = []
         else:
-            visited = {planet: False for planet in self.map.keys()}
-            path = self.__find_path(src, visited, dest)
-            path.pop(0) # for dfs
+            # DFS
+            # visited = {planet: False for planet in self.map.keys()}
+            # path = self.__find_path(src, visited, dest)
+            # path.pop(0) # for dfs
+            # DIJKSTRA
+            path = self.__dijkstra(src, dest)
+            for i in range(0, len(path) - 1):
+                self.update_cost(path[i], path[i + 1])
+            self.update_cost(src, path[0])
 
         msg = f'Path: {path}'
         print(msg)
         logger.debug(msg)
 
-        # path = self.__dijkstra(src, dest)
 
-        # for i in range(0, len(path) - 1):
-        #     self.update_cost(path[i], path[i + 1])
-        # self.update_cost(src, path[0])
         return path
