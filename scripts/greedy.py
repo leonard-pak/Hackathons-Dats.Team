@@ -61,5 +61,5 @@ def solution(client: client.Client):
 
 
 if __name__ == '__main__':
-    game_client = client.Client()
+    game_client = client.Client(period_call=0.3)
     solution(game_client)

@@ -6,11 +6,20 @@ import os
 import requests
 import typing as tp
 from time import time, sleep
+import datetime as dt
 
 from mock import collect_mock, universe_mock, travel_mock
 
 dotenv.load_dotenv()
+start_time = dt.datetime.now()
 logger = logging.getLogger(__name__)
+logger.basicConfig(
+    filename=f'logs/{start_time.strftime("%H-%M-%S")}.log',
+    filemode='a',
+    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+    datefmt='%H:%M:%S',
+    level=logging.DEBUG
+)
 
 class Method(enum.Enum):
     POST = 'POST'
@@ -67,6 +76,8 @@ class Client():
     def __request(self, method: Method, url: str, json = None):
         while (time() - self._last_call < self._period_call):
             sleep(self._period_call * 0.1)
+        logger.debug(f'[{method.value}] [{url}] Payload: {json}')
         res = requests.request(method=method.value, url=url, headers=self._auth_header, json=json)
+        logger.debug(f'[{method.value}] [{url}] Response: {res.text}')
         self._last_call = time()
         return res
