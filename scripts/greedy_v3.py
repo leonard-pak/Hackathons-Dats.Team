@@ -34,9 +34,6 @@ def solution(client: client.Client):
 
     cur_planet = res_universe['ship']['planet']['name']
     # queue = deque(unvs.get_all_neighbors(cur_planet))
-    neigs = unvs.get_all_neighbors(cur_planet)
-    pq = [(len(unvs.get_path(unvs.RECUCLER, n)), n) for n in neigs]
-    heapify(pq)
     path = []
     cleaned_planets: tp.Set[str] = {unvs.HOME, unvs.RECUCLER, cur_planet}
     start_time = time.time()

@@ -1,7 +1,6 @@
 
 from dataclasses import dataclass
 import typing as tp
-from collections import deque
 from heapq import heappush, heapify, heappop
 import logging
 import datetime as dt
@@ -139,16 +138,23 @@ class Universe:
         return path
 
     def get_next_planet(self):
-        return heappop(self._pq)
+        return heappop(self._pq)[1]
 
     def build_heap(self, ignore_planets: tp.Set[str] = {}):
         self._pq = []
         for planet in self.map.keys():
+            cost = 0
             if self.RECUCLER == planet or (planet in ignore_planets):
                 continue
             path = self.__get_path(self.RECUCLER, planet)
             for i in range(len(path) - 1):
                 cost += self.map[path[i]][path[i + 1]]
-            cost += self.map[self.RECUCLER][path[i]]
+            cost += self.map[self.RECUCLER][path[0]]
+
+            path = self.__get_path(planet, self.RECUCLER)
+            for i in range(len(path) - 1):
+                cost += self.map[path[i]][path[i + 1]]
+            cost += self.map[planet][path[0]]
+
             self._pq.append((cost, planet))
         heapify(self._pq)

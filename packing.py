@@ -1,6 +1,5 @@
 import typing as tp
 
-import math
 import numpy as np
 
 import garbage
@@ -57,16 +56,10 @@ def _calc_figure_bbox_area(figure) -> int:
 
 def _sort_function(garbage_item: garbage.GarbageItem) -> tp.Tuple[int, int]:
     # returns (Free space, Area)
-    # figure = _garbage_to_figure(garbage_item)
-    # area = _calc_figure_area(figure)
-    # bbox_area = _calc_figure_bbox_area(figure)
-    # return (bbox_area - area, area)
-
-    # returns (Area desc, Free space desc)
     figure = _garbage_to_figure(garbage_item)
     area = _calc_figure_area(figure)
     bbox_area = _calc_figure_bbox_area(figure)
-    return (area, bbox_area - area)
+    return (bbox_area - area, area)
 
 class Packager():
     def __init__(self, capacity_x: int, capacity_y: int, garbage_list: tp.List[garbage.GarbageItem]) -> None:
@@ -166,7 +159,7 @@ class Packager():
         return optimal_pos
 
     def _sort_garbages(self, garbage_list: tp.List[garbage.GarbageItem]) -> tp.List[garbage.GarbageItem]:
-        return sorted(garbage_list, key=_sort_function, reverse=True)
+        return sorted(garbage_list, key=_sort_function)
 
     def pack_garbages(self) -> tp.List[garbage.GarbageItem]:
         for garbage_item in self.garbage_list:
@@ -198,17 +191,18 @@ class Packager():
 
     def add_planet_load(self, garbage_list: tp.List[garbage.GarbageItem], iteration_limit: int = 25) -> tp.List[garbage.GarbageItem]:
         # refresh garbage list for new planet
-        initial_load = np.sum(self.occupancy_map > 0)
-        reqiured_load = int(math.ceil(self.occupancy_map.size * 0.05))
-        self.garbage_list = self._sort_garbages(garbage_list)
-        new_load_plan = self.iterate_over_packing(iteration_limit)
-        return new_load_plan
+        self.garbage_list = self._sort_garbages(garbage_list + self.packed_garbages)
+        self.packed_garbages: tp.List[garbage.GarbageItem] = []
+
+        self.occupancy_map = self._calc_occupancy_map()
+        self.distance_map = self._calc_distance_map()
+        return self.iterate_over_packing(iteration_limit)
 
     def check_load_availability(self) -> bool:
         # check if additional load can be done on next planet
-        load_share = np.sum(self.occupancy_map > 0) / self.occupancy_map.size
-        if load_share > 0.7:
-            return False
+        # load_share = np.sum(self.occupancy_map > 0) / self.occupancy_map.size
+        # if load_share > 0.7:
+        #     return False
 
         # check if free rectangle in occupancy map
         shape_x = 4
