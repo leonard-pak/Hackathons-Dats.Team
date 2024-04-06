@@ -6,7 +6,7 @@ import typing as tp
 from ship import Ship
 import packing
 import time
-from heapq import heapify, heappop, heappush, hea
+from heapq import heapify, heappop, heappush
 
 import logging
 import datetime as dt
@@ -60,6 +60,7 @@ def solution(client: client.Client):
 
             res_collect = client.post_collect({g.name: g.form for g in collectGarbage})
         else:
+            packager = packing.Packager(ship.storage.capacity_x, ship.storage.capacity_y, [])
             res_collect = {'leaved': []}
 
         if len(res_collect['leaved']) == 0:
@@ -71,13 +72,25 @@ def solution(client: client.Client):
            heappush(pq, (priority, target_planet))
         path = unvs.get_path(cur_planet, unvs.RECUCLER)
 
-        while (path[0] != unvs.RECUCLER and not cleaned_planets[path[0]] and True): # TODO true to package method
-            target_planet = path.pop(0)
-            res_travel = client.post_travel([target_planet])
+        while (path and (path[0] != unvs.RECUCLER) and packager.check_load_availability()):
+            local_path = []
+            for item in path:
+                if item in cleaned_planets:
+                    local_path.append(item)
+                else:
+                    local_path.append(item)
+                    break
+            if local_path == path:
+                break
+
+            for item in local_path:
+                path.remove(item)
+
+            res_travel = client.post_travel(local_path)
             planetGarbages = GarbageItem.createList(res_travel['planetGarbage'])
 
             if planetGarbages:
-                collectGarbage #=  packager.newCollection(planetGarbage) TODO
+                collectGarbage = packager.add_planet_load(planetGarbages)
                 res_collect = client.post_collect({g.name: g.form for g in collectGarbage})
             else:
                 res_collect = {'leaved': []}

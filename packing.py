@@ -1,5 +1,6 @@
 import typing as tp
 
+import math
 import numpy as np
 
 import garbage
@@ -56,11 +57,16 @@ def _calc_figure_bbox_area(figure) -> int:
 
 def _sort_function(garbage_item: garbage.GarbageItem) -> tp.Tuple[int, int]:
     # returns (Free space, Area)
+    # figure = _garbage_to_figure(garbage_item)
+    # area = _calc_figure_area(figure)
+    # bbox_area = _calc_figure_bbox_area(figure)
+    # return (bbox_area - area, area)
+
+    # returns (Area desc, Free space desc)
     figure = _garbage_to_figure(garbage_item)
     area = _calc_figure_area(figure)
     bbox_area = _calc_figure_bbox_area(figure)
-    return (bbox_area - area, area)
-
+    return (area, bbox_area - area)
 
 class Packager():
     def __init__(self, capacity_x: int, capacity_y: int, garbage_list: tp.List[garbage.GarbageItem]) -> None:
@@ -160,7 +166,7 @@ class Packager():
         return optimal_pos
 
     def _sort_garbages(self, garbage_list: tp.List[garbage.GarbageItem]) -> tp.List[garbage.GarbageItem]:
-        return sorted(garbage_list, key=_sort_function)
+        return sorted(garbage_list, key=_sort_function, reverse=True)
 
     def pack_garbages(self) -> tp.List[garbage.GarbageItem]:
         for garbage_item in self.garbage_list:
@@ -173,7 +179,7 @@ class Packager():
 
         return self.packed_garbages
 
-    def iterate_over_packing(self, iteration_limit: int) -> tp.List[garbage.GarbageItem]:
+    def iterate_over_packing(self, iteration_limit: int = 25) -> tp.List[garbage.GarbageItem]:
         iterations = 0
         prev_load = np.sum(self.occupancy_map > 0)
         while iterations < iteration_limit:
@@ -189,6 +195,30 @@ class Packager():
             prev_load = new_load
 
         return self.packed_garbages
+
+    def add_planet_load(self, garbage_list: tp.List[garbage.GarbageItem], iteration_limit: int = 25) -> tp.List[garbage.GarbageItem]:
+        # refresh garbage list for new planet
+        initial_load = np.sum(self.occupancy_map > 0)
+        reqiured_load = int(math.ceil(self.occupancy_map.size * 0.05))
+        self.garbage_list = self._sort_garbages(garbage_list)
+        new_load_plan = self.iterate_over_packing(iteration_limit)
+        return new_load_plan
+
+    def check_load_availability(self) -> bool:
+        # check if additional load can be done on next planet
+        load_share = np.sum(self.occupancy_map > 0) / self.occupancy_map.size
+        if load_share > 0.7:
+            return False
+
+        # check if free rectangle in occupancy map
+        shape_x = 4
+        shape_y = 4
+        for dy in range(self.capacity_y - 1, shape_y - 1, -1):
+            for dx in range(self.capacity_x - 1, shape_x - 1, -1):
+                if not np.any(self.occupancy_map[dy-shape_y:dy, dx-shape_x:dx]):
+                    return True
+
+        return False
 
 
 def optimal_packing(capacity_x: int, capacity_y: int, garbage_list: tp.List[garbage.GarbageItem]) -> tp.List[garbage.GarbageItem]:
