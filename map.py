@@ -84,6 +84,8 @@ class Universe:
         # visited = {planet: False for planet in self.map.keys()}
         # path = self.__find_path(src, visited, dest)
         # path.pop(0) # for dfs
+        if src == dest:
+            return []
 
         path = self.__dijkstra(src, dest)
 

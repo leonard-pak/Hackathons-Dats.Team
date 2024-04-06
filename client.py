@@ -12,14 +12,14 @@ from mock import collect_mock, universe_mock, travel_mock
 
 dotenv.load_dotenv()
 start_time = dt.datetime.now()
-logger = logging.getLogger(__name__)
-logger.basicConfig(
+logging.basicConfig(
     filename=f'logs/{start_time.strftime("%H-%M-%S")}.log',
     filemode='a',
     format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
     datefmt='%H:%M:%S',
     level=logging.DEBUG
 )
+logger = logging.getLogger(__name__)
 
 class Method(enum.Enum):
     POST = 'POST'
@@ -35,14 +35,14 @@ class Client():
         self._period_call = period_call
 
     def get_universe(self):
-        # return universe_mock
+        return universe_mock
         uri = '/player/universe'
         url = self._host + uri
         response = self.__request(Method.GET, url=url)
         return json.loads(response.text)
 
     def post_travel(self, planets: tp.List[str]):
-        # return travel_mock
+        return travel_mock
         uri = '/player/travel'
         url = self._host + uri
         body = {
@@ -52,7 +52,7 @@ class Client():
         return json.loads(response.text)
 
     def post_collect(self, garbage: tp.Dict[str, tp.List[tp.Tuple[int, int]]]):
-        # return collect_mock
+        return collect_mock
         uri = '/player/collect'
         url = self._host + uri
         body = {
