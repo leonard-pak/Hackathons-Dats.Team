@@ -40,11 +40,11 @@ def solution(client: client.Client):
     path = []
     cleaned_planets: tp.Set[str] = {unvs.HOME, unvs.RECUCLER, cur_planet}
     start_time = time.time()
-    while len(pq) != 0:
+    while len(unvs._pq) != 0:
         cycle_start = time.time()
         cycle_number += 1
 
-        priority, target_planet = heappop(pq)
+        target_planet = unvs.get_next_planet()
         if target_planet in cleaned_planets:
             continue
 
@@ -52,6 +52,7 @@ def solution(client: client.Client):
         res_travel = client.post_travel(path)
         planetGarbages = GarbageItem.createList(res_travel['planetGarbage'])
         cur_planet = target_planet
+        unvs.build_heap(cleaned_planets)
 
         if planetGarbages:
             packager = packing.Packager(ship.storage.capacity_x, ship.storage.capacity_y, planetGarbages)
@@ -65,11 +66,7 @@ def solution(client: client.Client):
 
         if len(res_collect['leaved']) == 0:
             cleaned_planets.add(target_planet)
-            neigs = unvs.get_all_neighbors(target_planet)
-            for n in neigs:
-                heappush(pq, (len(unvs.get_path(unvs.RECUCLER, n)), n))
-        else:
-           heappush(pq, (priority, target_planet))
+        unvs.build_heap(cleaned_planets)
         path = unvs.get_path(cur_planet, unvs.RECUCLER)
 
         while (path and (path[0] != unvs.RECUCLER) and packager.check_load_availability()):
@@ -97,9 +94,7 @@ def solution(client: client.Client):
 
             if len(res_collect['leaved']) == 0:
                 cleaned_planets.add(target_planet)
-                neigs = unvs.get_all_neighbors(target_planet)
-                for n in neigs:
-                    heappush(pq, (len(unvs.get_path(unvs.RECUCLER, n)), n))
+            unvs.build_heap(cleaned_planets)
 
 
         cur_planet = unvs.RECUCLER

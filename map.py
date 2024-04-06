@@ -31,6 +31,7 @@ class Universe:
         self.map: tp.Dict[tp.Dict[int]] = {link.src: {} for link in links}
         for link in links:
             self.map[link.src][link.dest] = link.fuel
+        self.build_heap()
 
     @classmethod
     def create(cls, record) -> 'Universe':
@@ -115,3 +116,39 @@ class Universe:
 
 
         return path
+
+    def __get_path(self, src: str, dest: str):
+        msg = f'Search path from {src}, to {dest}'
+        # print(msg)
+        # logger.debug(msg)
+        if src == dest:
+            path = []
+        else:
+            # DFS
+            # visited = {planet: False for planet in self.map.keys()}
+            # path = self.__find_path(src, visited, dest)
+            # path.pop(0) # for dfs
+            # DIJKSTRA
+            path = self.__dijkstra(src, dest)
+
+        msg = f'Path: {path}'
+        # print(msg)
+        # logger.debug(msg)
+
+
+        return path
+
+    def get_next_planet(self):
+        return heappop(self._pq)
+
+    def build_heap(self, ignore_planets: tp.Set[str] = {}):
+        self._pq = []
+        for planet in self.map.keys():
+            if self.RECUCLER == planet or (planet in ignore_planets):
+                continue
+            path = self.__get_path(self.RECUCLER, planet)
+            for i in range(len(path) - 1):
+                cost += self.map[path[i]][path[i + 1]]
+            cost += self.map[self.RECUCLER][path[i]]
+            self._pq.append((cost, planet))
+        heapify(self._pq)
