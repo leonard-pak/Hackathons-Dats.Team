@@ -3,6 +3,18 @@ from dataclasses import dataclass
 import typing as tp
 from collections import deque
 from heapq import heappush, heapify, heappop
+import logging
+import datetime as dt
+
+start_time = dt.datetime.now()
+logging.basicConfig(
+    filename=f'logs/{start_time.strftime("%H-%M-%S")}.log',
+    filemode='a',
+    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+    datefmt='%H:%M:%S',
+    level=logging.DEBUG
+)
+logger = logging.getLogger(__name__)
 
 @dataclass
 class Link:
@@ -81,15 +93,16 @@ class Universe:
         return False
 
     def get_path(self, src: str, dest: str):
-        # visited = {planet: False for planet in self.map.keys()}
-        # path = self.__find_path(src, visited, dest)
-        # path.pop(0) # for dfs
+        print(f'Find path from {src}, to {dest}')
         if src == dest:
             return []
+        visited = {planet: False for planet in self.map.keys()}
+        path = self.__find_path(src, visited, dest)
+        path.pop(0) # for dfs
 
-        path = self.__dijkstra(src, dest)
+        # path = self.__dijkstra(src, dest)
 
-        for i in range(0, len(path) - 1):
-            self.update_cost(path[i], path[i + 1])
-        self.update_cost(src, path[0])
+        # for i in range(0, len(path) - 1):
+        #     self.update_cost(path[i], path[i + 1])
+        # self.update_cost(src, path[0])
         return path

@@ -35,30 +35,30 @@ class Client():
         self._period_call = period_call
 
     def get_universe(self):
-        return universe_mock
+        # return universe_mock
         uri = '/player/universe'
         url = self._host + uri
         response = self.__request(Method.GET, url=url)
         return json.loads(response.text)
 
     def post_travel(self, planets: tp.List[str]):
-        return travel_mock
+        # return travel_mock
         uri = '/player/travel'
         url = self._host + uri
         body = {
             'planets': planets,
         }
-        response = self.__request(Method.POST, url=url, json=body)
+        response = self.__request(Method.POST, url=url, payload=body)
         return json.loads(response.text)
 
     def post_collect(self, garbage: tp.Dict[str, tp.List[tp.Tuple[int, int]]]):
-        return collect_mock
+        # return collect_mock
         uri = '/player/collect'
         url = self._host + uri
         body = {
             'garbage': garbage,
         }
-        response = self.__request(Method.POST, url=url, json=body)
+        response = self.__request(Method.POST, url=url, payload=body)
         return json.loads(response.text)
 
     def delete_reset(self):
@@ -73,11 +73,11 @@ class Client():
         response = self.__request(Method.GET, url=url)
         return json.loads(response.text)
 
-    def __request(self, method: Method, url: str, json = None):
+    def __request(self, method: Method, url: str, payload = None):
         while (time() - self._last_call < self._period_call):
             sleep(self._period_call * 0.1)
-        logger.debug(f'[{method.value}] [{url}] Payload: {json}')
-        res = requests.request(method=method.value, url=url, headers=self._auth_header, json=json)
+        logger.debug(f'[{method.value}] [{url}] Payload: {payload}')
+        res = requests.request(method=method.value, url=url, headers=self._auth_header, json=payload)
         logger.debug(f'[{method.value}] [{url}] Response: {res.text}')
         self._last_call = time()
         return res

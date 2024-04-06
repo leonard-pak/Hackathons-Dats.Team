@@ -17,7 +17,7 @@ def _garbage_to_figure(garbage_item: garbage.GarbageItem):
 
 def _figure_to_garbage(name: str, figure) -> garbage.GarbageItem:
     figure = np.flip(figure)
-    form: garbage.GarbageItemT = [tuple(coord) for coord in figure]
+    form: garbage.GarbageItemT = [coord.tolist() for coord in figure]
     return garbage.GarbageItem(name, form)
 
 
