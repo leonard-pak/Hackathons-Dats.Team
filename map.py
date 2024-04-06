@@ -26,7 +26,7 @@ class Universe:
         return cls(links)
 
     def update_cost(self, src: str, dest: str):
-        map[src][dest] += self.FEE
+        self.map[src][dest] += self.FEE
 
     def get_all_neighbors(self, planet):
         neighbors = [n for n in self.map[planet].keys()]
