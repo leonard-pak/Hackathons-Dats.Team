@@ -21,6 +21,7 @@ def solution(client: client.Client):
     cur_planet = unvs.HOME
     path = []
     cleaned_planets: tp.Set[str] = {unvs.HOME}
+    start_time = time.time()
     while len(queue) != 0:
         cycle_start = time.time()
         cycle_number += 1
@@ -55,6 +56,8 @@ def solution(client: client.Client):
     # packager.occupancy_map[packager.occupancy_map == 0] -= 5
     # fig = px.imshow(packager.occupancy_map, color_continuous_scale='Jet', origin='lower')
     # fig.show()
+    print(time.time() - start_time)
+    print(len(cleaned_planets) == len(unvs.map))
 
 
 if __name__ == '__main__':
