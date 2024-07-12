@@ -3,17 +3,20 @@ import enum
 import typing as tp
 
 
+BaseModelT = tp.TypeVar('BaseModelT', bound='BaseModel')
+
+
 @dataclasses.dataclass
 class BaseModel():
     def to_record(self) -> tp.Dict:
         return dataclasses.asdict(self)
 
     @classmethod
-    def from_record(cls, record: tp.Dict) -> 'BaseModel':
+    def from_record(cls: tp.Type[BaseModelT], record: tp.Dict) -> 'BaseModelT':
         return cls(**record)
 
     @classmethod
-    def from_list_record(cls, records: tp.List[tp.Dict]) -> tp.List['BaseModel']:
+    def from_list_record(cls: tp.Type[BaseModelT], records: tp.List[tp.Dict]) -> tp.List['BaseModelT']:
         return [cls.from_record(record) for record in records]
 
 
@@ -84,6 +87,15 @@ class Player(BaseModel):
     zombie_kills: int
 
 
+class ZombieTypes(str, enum.Enum):
+    NORMAL = 'normal'
+    FAST = 'fast'
+    BOMBER = 'bomber'
+    LINER = 'liner'
+    JUGGERNAUT = 'juggernaut'
+    CHAOS_KNIGHT = 'chaos_knight'
+
+
 @dataclasses.dataclass
 class Zombie(BaseModel):
     attack: int
@@ -91,7 +103,7 @@ class Zombie(BaseModel):
     health: int
     id: str
     speed: int
-    type: str
+    type: ZombieTypes
     wait_turns: int
     x: int
     y: int
