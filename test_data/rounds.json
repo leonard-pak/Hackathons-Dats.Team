@@ -1,0 +1,76 @@
+{
+    "gameName": "zombidef-test",
+    "rounds": [
+        {
+            "name": "test-day1-10",
+            "startAt": "2024-07-12T19:00:00Z",
+            "endAt": "2024-07-12T19:20:00Z",
+            "duration": 1200,
+            "status": "not started"
+        },
+        {
+            "name": "test-day1-9",
+            "startAt": "2024-07-12T18:40:00Z",
+            "endAt": "2024-07-12T19:00:00Z",
+            "duration": 1200,
+            "status": "not started"
+        },
+        {
+            "name": "test-day1-8",
+            "startAt": "2024-07-12T18:20:00Z",
+            "endAt": "2024-07-12T18:40:00Z",
+            "duration": 1200,
+            "status": "not started"
+        },
+        {
+            "name": "test-day1-7",
+            "startAt": "2024-07-12T18:00:00Z",
+            "endAt": "2024-07-12T18:20:00Z",
+            "duration": 1200,
+            "status": "active"
+        },
+        {
+            "name": "test-day1-6-1",
+            "startAt": "2024-07-12T17:40:00Z",
+            "endAt": "2024-07-12T17:50:00Z",
+            "duration": 600,
+            "status": "ended"
+        },
+        {
+            "name": "test-day1-5",
+            "startAt": "2024-07-12T17:20:00Z",
+            "endAt": "2024-07-12T17:40:00Z",
+            "duration": 1200,
+            "status": "ended"
+        },
+        {
+            "name": "test-day1-4",
+            "startAt": "2024-07-12T17:00:00Z",
+            "endAt": "2024-07-12T17:20:00Z",
+            "duration": 1200,
+            "status": "ended"
+        },
+        {
+            "name": "test-day1-3",
+            "startAt": "2024-07-12T16:40:00Z",
+            "endAt": "2024-07-12T17:00:00Z",
+            "duration": 1200,
+            "status": "ended"
+        },
+        {
+            "name": "test-day1-2",
+            "startAt": "2024-07-12T16:20:00Z",
+            "endAt": "2024-07-12T16:40:00Z",
+            "duration": 1200,
+            "status": "ended"
+        },
+        {
+            "name": "test-day1-1",
+            "startAt": "2024-07-12T16:00:00Z",
+            "endAt": "2024-07-12T16:20:00Z",
+            "duration": 1200,
+            "status": "ended"
+        }
+    ],
+    "now": "2024-07-12T18:03:28.90624184Z"
+}

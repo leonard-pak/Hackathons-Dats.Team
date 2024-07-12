@@ -1,0 +1,16 @@
+{
+    "realmName": "test-day1-7",
+    "player": {
+        "gold": 10,
+        "points": 0,
+        "name": "Hikikomori vs Zombies",
+        "zombieKills": 0,
+        "enemyBlockKills": 0,
+        "gameEndedAt": "2024-07-12T18:06:24.096775262Z"
+    },
+    "base": null,
+    "zombies": null,
+    "enemyBlocks": null,
+    "turnEndsInMs": 407,
+    "turn": 123
+}

@@ -70,19 +70,19 @@ class Client():
         # return universe_mock
         uri = '/play/zombidef/units'
         url = self._host + uri
-        response = self.__request(Method.GET, url=url)
+        response = self._request(Method.GET, url=url)
         return json.loads(response.text)
 
     def get_world(self):
         # return universe_mock
         uri = '/play/zombidef/world'
         url = self._host + uri
-        response = self.__request(Method.GET, url=url)
+        response = self._request(Method.GET, url=url)
         return json.loads(response.text)
 
     def get_rounds(self):
         # return universe_mock
         uri = '/rounds/zombidef'
         url = self._host + uri
-        response = self.__request(Method.GET, url=url)
+        response = self._request(Method.GET, url=url)
         return json.loads(response.text)

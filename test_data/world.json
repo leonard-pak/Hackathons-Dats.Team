@@ -1,0 +1,225 @@
+{
+    "realmName": "test-day1-7",
+    "zpots": [
+        {
+            "x": 165,
+            "y": 195,
+            "type": "default"
+        },
+        {
+            "x": 162,
+            "y": 210,
+            "type": "default"
+        },
+        {
+            "x": 163,
+            "y": 210,
+            "type": "default"
+        },
+        {
+            "x": 165,
+            "y": 199,
+            "type": "default"
+        },
+        {
+            "x": 165,
+            "y": 210,
+            "type": "default"
+        },
+        {
+            "x": 165,
+            "y": 201,
+            "type": "default"
+        },
+        {
+            "x": 147,
+            "y": 195,
+            "type": "default"
+        },
+        {
+            "x": 150,
+            "y": 211,
+            "type": "default"
+        },
+        {
+            "x": 165,
+            "y": 200,
+            "type": "default"
+        },
+        {
+            "x": 156,
+            "y": 195,
+            "type": "default"
+        },
+        {
+            "x": 151,
+            "y": 195,
+            "type": "default"
+        },
+        {
+            "x": 148,
+            "y": 195,
+            "type": "default"
+        },
+        {
+            "x": 153,
+            "y": 195,
+            "type": "default"
+        },
+        {
+            "x": 150,
+            "y": 195,
+            "type": "default"
+        },
+        {
+            "x": 165,
+            "y": 198,
+            "type": "default"
+        },
+        {
+            "x": 161,
+            "y": 210,
+            "type": "default"
+        },
+        {
+            "x": 164,
+            "y": 210,
+            "type": "default"
+        },
+        {
+            "x": 150,
+            "y": 206,
+            "type": "default"
+        },
+        {
+            "x": 150,
+            "y": 207,
+            "type": "default"
+        },
+        {
+            "x": 150,
+            "y": 209,
+            "type": "default"
+        },
+        {
+            "x": 165,
+            "y": 192,
+            "type": "default"
+        },
+        {
+            "x": 154,
+            "y": 195,
+            "type": "default"
+        },
+        {
+            "x": 157,
+            "y": 195,
+            "type": "default"
+        },
+        {
+            "x": 150,
+            "y": 205,
+            "type": "default"
+        },
+        {
+            "x": 166,
+            "y": 210,
+            "type": "default"
+        },
+        {
+            "x": 150,
+            "y": 210,
+            "type": "default"
+        },
+        {
+            "x": 150,
+            "y": 208,
+            "type": "default"
+        },
+        {
+            "x": 159,
+            "y": 210,
+            "type": "default"
+        },
+        {
+            "x": 165,
+            "y": 202,
+            "type": "default"
+        },
+        {
+            "x": 152,
+            "y": 195,
+            "type": "default"
+        },
+        {
+            "x": 168,
+            "y": 210,
+            "type": "default"
+        },
+        {
+            "x": 150,
+            "y": 212,
+            "type": "default"
+        },
+        {
+            "x": 165,
+            "y": 194,
+            "type": "default"
+        },
+        {
+            "x": 167,
+            "y": 210,
+            "type": "default"
+        },
+        {
+            "x": 150,
+            "y": 203,
+            "type": "default"
+        },
+        {
+            "x": 165,
+            "y": 197,
+            "type": "default"
+        },
+        {
+            "x": 150,
+            "y": 213,
+            "type": "default"
+        },
+        {
+            "x": 165,
+            "y": 193,
+            "type": "default"
+        },
+        {
+            "x": 149,
+            "y": 195,
+            "type": "default"
+        },
+        {
+            "x": 155,
+            "y": 195,
+            "type": "default"
+        },
+        {
+            "x": 165,
+            "y": 196,
+            "type": "default"
+        },
+        {
+            "x": 158,
+            "y": 210,
+            "type": "default"
+        },
+        {
+            "x": 150,
+            "y": 204,
+            "type": "default"
+        },
+        {
+            "x": 160,
+            "y": 210,
+            "type": "default"
+        }
+    ]
+}
