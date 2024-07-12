@@ -115,14 +115,14 @@ class TurnEndsInMs(BaseModel):
 @dataclasses.dataclass
 class ZombieSpot(BaseModel):
     x: int
-    x: int
+    y: int
     type: str = 'default'
 
 
 @dataclasses.dataclass
 class Wall(BaseModel):
     x: int
-    x: int
+    y: int
     type: str = 'wall'
 
 
