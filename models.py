@@ -47,11 +47,11 @@ class BaseItem(BaseModel):
     attack: int
     health: int
     id: str
-    isHead: bool
     last_attack: Point
     range: int
     x: int
     y: int
+    isHead: bool = False
 
     @classmethod
     def from_record(cls, record: tp.Dict) -> 'BaseItem':
@@ -64,11 +64,11 @@ class BaseItem(BaseModel):
 class EnemyBaseItem(BaseModel):
     attack: int
     health: int
-    isHead: bool
     last_attack: Point
     name: str
     x: int
     y: int
+    isHead: bool = False
 
     @classmethod
     def from_record(cls, record: tp.Dict) -> 'EnemyBaseItem':
@@ -96,10 +96,17 @@ class ZombieTypes(str, enum.Enum):
     CHAOS_KNIGHT = 'chaos_knight'
 
 
+class ZombieDirection(str, enum.Enum):
+    TOP = 'top'
+    BOTTOM = 'bottom'
+    RIGHT = 'right'
+    LEFT = 'left'
+
+
 @dataclasses.dataclass
 class Zombie(BaseModel):
     attack: int
-    direction: str
+    direction: ZombieDirection
     health: int
     id: str
     speed: int

@@ -6,7 +6,7 @@ import numpy as np
 
 
 # Определяем разные типы объектов на карте
-class MapNumbers(enum.Enum):
+class MapNumbers(int, enum.Enum):
     EMPTY = 0
     ZOMBIE = 1
     ZOMBIE_SPAWN = 2
@@ -17,7 +17,7 @@ class MapNumbers(enum.Enum):
     ENEMY_CAPITAL = 7
 
 
-class MapColors(enum.Enum):
+class MapColors(str, enum.Enum):
     EMPTY = 'white'
     ZOMBIE = 'red'
     ZOMBIE_SPAWN = 'yellow'
