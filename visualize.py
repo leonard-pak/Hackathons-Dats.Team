@@ -9,16 +9,18 @@ import numpy as np
 class MapNumbers(enum.Enum):
     EMPTY = 0
     ZOMBIE = 1
-    WALL = 2
-    MY_BASE = 3
-    MY_CAPITAL = 4
-    ENEMY_BASE = 5
-    ENEMY_CAPITAL = 6
+    ZOMBIE_SPAWN = 2
+    WALL = 3
+    MY_BASE = 4
+    MY_CAPITAL = 5
+    ENEMY_BASE = 6
+    ENEMY_CAPITAL = 7
 
 
 class MapColors(enum.Enum):
     EMPTY = 'white'
     ZOMBIE = 'red'
+    ZOMBIE_SPAWN = 'yellow'
     WALL = 'grey'
     MY_BASE = 'green'
     MY_CAPITAL = 'blue'
@@ -68,7 +70,7 @@ def _main():
     game_map[13, 3] = MapNumbers.MY_CAPITAL.value
     fill_area(game_map, (2, 12), (5, 15), MapNumbers.ENEMY_BASE.value)
     game_map[3, 13] = MapNumbers.ENEMY_CAPITAL.value
-    game_map[8, 8] = MapNumbers.ZOMBIE.value
+    game_map[8, 8] = MapNumbers.ZOMBIE_SPAWN.value
 
     visualize_map(game_map)
 
