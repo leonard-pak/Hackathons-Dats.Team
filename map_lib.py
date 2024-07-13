@@ -5,6 +5,7 @@ from dataclasses import dataclass
 import enum
 import copy
 import itertools
+import zombie as z
 
 
 class PointType(int, enum.Enum):
@@ -92,6 +93,18 @@ class Map():
                     counter += 1
         return counter
 
+    def find_save_point(self):
+        damage_map = np.zeros(np.shape(self.__map))
+        for zombie in self._zombies.values():
+            points = z.DAMAGE_BY_ZOMBIE_TYPE[zombie.type](zombie)
+            for point in points:
+                damage_map[point[0]][point[1]] = 1 / zombie.attack
+
+        mask = np.isin(self.__map, self.OUR_GROUP)
+        damage_map[mask] = 0
+        i = damage_map.argmax()
+        return i // np.shape(damage_map)[0], i % np.shape(damage_map)[0]
+
     def is_point_available_to_build(self, x: int, y: int):
         # В отрицательную зону нельзя
         if x < 0 or y < 0:
@@ -135,6 +148,8 @@ class Map():
 
     def is_our_base(self, x: int, y: int):
         return self.__map[x][y] in self.OUR_GROUP
+
+    def _predic
 
     def _build_static_map(self, reserve_multiplier: int):
         points = list[npt.NDArray[np.int32]]()
