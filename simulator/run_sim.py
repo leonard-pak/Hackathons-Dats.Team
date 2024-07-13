@@ -30,7 +30,7 @@ for spot in zombie_spots:
 zombies: tp.List[simulator_models.Zombie] = []
 
 turn_number = 0
-for step in range(10):
+for step in range(100):
     turn_number += 1
 
     for spot in zombie_spots:
