@@ -35,13 +35,8 @@ class EnemyBlock:
     # last_atack не используются
     attack: int
     health: int
+    is_head: bool
     point: npt.NDArray[np.int32]
-
-
-@dataclass
-class Enemy:
-    blocks: list[EnemyBlock] = field(default_factory=lambda: list())
-    head_idx: int = 0
 
 
 @dataclass
@@ -55,6 +50,13 @@ class Zombie:
     point: npt.NDArray[np.int32]
 
 
+@dataclass
+class GameInfo:
+    # gameEndedAt points name zombieKills enemyBlockKills не используются
+    gold: int
+    turn: int
+
+
 class Store:
     def __init__(self, client: Client) -> None:
         self._client = client
@@ -65,22 +67,21 @@ class Store:
         self._walls = [m.Wall.from_record(
             record) for record in world_record['zpots'] if record['type'] == m.Wall.type]
         # TODO не используется
-        self._round_name = m.RealmName.from_record({'realmName': world_record['realmName']})
+        # self._round_name = m.RealmName.from_record(
+        #     {'realmName': world_record['realmName']})
 
     def sync(self):
         turn_info = self._client.get_units()
         self._base = m.BaseItem.from_list_record(turn_info['base'])
         self._enemies = m.EnemyBaseItem.from_list_record(
             turn_info['enemyBlocks'])
-        # TODO не используется
         self._player = m.Player.from_record(turn_info['player'])
         # TODO не используется
         # self._last_round_name = m.RealmName.from_record(
         #     {'realmName': turn_info['realmName']})
-        # # TODO не используется
-        # self._turn = m.Turn.from_record(
-        #     {'turn': turn_info['turn']})
-        # # TODO не используется
+        self._turn = m.Turn.from_record(
+            {'turn': turn_info['turn']})
+        # TODO не используется
         # self._ms_to_end = m.TurnEndsInMs.from_record(
         #     {'turnEndsInMs': turn_info['turnEndsInMs']})
         self._zombies = m.Zombie.from_list_record(turn_info['zombies'])
@@ -102,20 +103,12 @@ class Store:
         return base
 
     def get_enemies(self):
-        enemies_dict: dict[str, Enemy] = {}
-        for enemy_info in self._enemies:
-            if enemy_info.isHead:
-                enemies_dict[enemy_info.name].head_idx = len(
-                    enemies_dict[enemy_info.name].blocks)
-            if enemy_info.name not in enemies_dict:
-                enemies_dict[enemy_info.name] = Enemy([], 0)
-            enemies_dict[enemy_info.name].blocks.append(EnemyBlock(
-                attack=enemy_info.attack,
-                health=enemy_info.health,
-                point=np.array([enemy_info.x, enemy_info.y])
-            ))
-
-        return enemies_dict
+        return [EnemyBlock(
+            attack=enemy_info.attack,
+            health=enemy_info.health,
+            is_head=enemy_info.isHead,
+            point=np.array([enemy_info.x, enemy_info.y])
+        ) for enemy_info in self._enemies]
 
     def get_zombies(self):
         zombies = dict[str, Zombie]()
@@ -133,3 +126,6 @@ class Store:
             )
 
         return zombies
+
+    def get_game_info(self):
+        return GameInfo(gold=self._player.gold, turn=self._turn.turn)
