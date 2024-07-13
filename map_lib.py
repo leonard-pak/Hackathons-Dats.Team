@@ -173,6 +173,50 @@ class Map():
 
         return (min_x, min_y) if success else None
 
+    def calc_score2(self, x, y):
+        score = 0
+        tmp_x = x
+        while self.is_our_base(tmp_x, y):
+            score += 1
+            tmp_x += 1
+        tmp_x = x
+        while self.is_our_base(tmp_x, y):
+            score -= 1
+            tmp_x -= 1
+        tmp_y = y
+        while self.is_our_base(x, tmp_y):
+            score += 1
+            tmp_y += 1
+        tmp_y = y
+        while self.is_our_base(x, tmp_y):
+            score -= 1
+            tmp_y -= 1
+        return score
+
+    def find_save_point3(self):
+        damage_map = np.zeros(np.shape(self._map))
+        for zombie in self._zombies.values():
+            points = z.DAMAGE_BY_ZOMBIE_TYPE[zombie.type](zombie)
+            for point in points:
+                damage_map[point[0]][point[1]] += zombie.attack
+
+        min_damage = 1e10
+        max_score = 0
+        min_x = 0
+        min_y = 0
+        success = False
+        for x in range(np.shape(damage_map)[0]):
+            for y in range(np.shape(damage_map)[1]):
+                if self.is_our_base(x, y) and damage_map[x][y] == 0:
+                    score = self.calc_score2(x, y)
+                    if score > max_score:
+                        max_score = score
+                        min_x = x
+                        min_y = y
+                        success = True
+
+        return (min_x, min_y) if success else None
+
     def is_point_available_to_build(self, x: int, y: int, turn: int = 1, turn_break: int = 50):
         # В отрицательную зону нельзя
         if x < 0 or y < 0:
