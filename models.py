@@ -2,6 +2,7 @@ import datetime as dt
 import dataclasses
 import enum
 import typing as tp
+import uuid
 
 import utils
 
@@ -96,10 +97,10 @@ class EnemyBaseItem(BaseModel):
     attack: int
     health: int
     last_attack: tp.Optional[Point]
-    name: str
     x: int
     y: int
     isHead: bool = False
+    name: str = dataclasses.field(default_factory=lambda: str(uuid.uuid1()))
 
     def __post_init__(self):
         self.isHead = self.attack == 40
@@ -111,7 +112,6 @@ class EnemyBaseItem(BaseModel):
             record['last_attack'] = None
         else:
             record['last_attack'] = Point(**last_attack)
-        record['last_attack'] = Point(**last_attack)
         return cls(**record)
 
 

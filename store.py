@@ -3,7 +3,6 @@ import models as m
 from dataclasses import dataclass, field
 import numpy as np
 import numpy.typing as npt
-from collections import defaultdict
 
 
 @dataclass
@@ -103,11 +102,13 @@ class Store:
         return base
 
     def get_enemies(self):
-        enemies_dict = defaultdict[str, Enemy]()
+        enemies_dict: dict[str, Enemy] = {}
         for enemy_info in self._enemies:
             if enemy_info.isHead:
                 enemies_dict[enemy_info.name].head_idx = len(
                     enemies_dict[enemy_info.name].blocks)
+            if enemy_info.name not in enemies_dict:
+                enemies_dict[enemy_info.name] = Enemy([], 0)
             enemies_dict[enemy_info.name].blocks.append(EnemyBlock(
                 attack=enemy_info.attack,
                 health=enemy_info.health,

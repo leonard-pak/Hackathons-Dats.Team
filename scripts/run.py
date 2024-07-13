@@ -128,7 +128,7 @@ def main():
         base_center = game_map._base.blocks[game_map._base.head_key].point
         attack = attacker.get_attack(game_map)
         build = builder.get_build(game_map)
-        move_base = models.MoveBase(x=base_center[0], y=base_center[1])
+        move_base = models.MoveBase(x=int(base_center[0]), y=int(base_center[1]))
         logger.info('Strategy calculated')
 
         response = game_client.post_commands(attack, build, move_base)
