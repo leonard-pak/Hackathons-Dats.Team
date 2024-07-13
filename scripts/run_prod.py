@@ -21,7 +21,7 @@ DTTM_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
 
 start_time = dt.datetime.now()
 logging.basicConfig(
-    filename=f'logs/{start_time.strftime("%H-%M-%S")}.log',
+    filename=f'logs/prod_{start_time.strftime("%H-%M-%S")}.log',
     filemode='a',
     format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
     datefmt='%H:%M:%S',
@@ -94,7 +94,7 @@ def wait_till_next_turn(cur_turn: int, game_client: client.Client):
 
 
 def main():
-    game_client = client.Client()
+    game_client = client.Client(is_prod=True)
 
     next_round = get_nearest_round(game_client)
 

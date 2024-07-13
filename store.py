@@ -71,6 +71,12 @@ class Store:
         #     {'realmName': world_record['realmName']})
 
     def sync(self):
+        world_record = self._client.get_world()
+        self._spots = [m.ZombieSpot.from_record(
+            record) for record in world_record['zpots'] if record['type'] == m.ZombieSpot.type]
+        self._walls = [m.Wall.from_record(
+            record) for record in world_record['zpots'] if record['type'] == m.Wall.type]
+
         turn_info = self._client.get_units()
         self._base = m.BaseItem.from_list_record(turn_info['base'])
         self._enemies = m.EnemyBaseItem.from_list_record(

@@ -16,7 +16,7 @@ AGGRO_CONFIG = {
     models.ZombieTypes.BOMBER: 100,
     models.ZombieTypes.LINER: 500,
     models.ZombieTypes.JUGGERNAUT: 40,
-    models.ZombieTypes.CHAOS_KNIGHT: 75,
+    models.ZombieTypes.CHAOS_KNIGHT: 50,
 }
 
 

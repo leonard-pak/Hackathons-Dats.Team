@@ -10,7 +10,8 @@ import utils
 random.seed(42)
 
 
-TURN = 75
+TURN = 50
+
 
 def get_build(game_map: map_lib.Map) -> tp.List[models.Build]:
     coins = game_map._info.gold
@@ -50,4 +51,20 @@ def get_build(game_map: map_lib.Map) -> tp.List[models.Build]:
     build_command_ordered = sorted(build_command_ordered, key=lambda x: x[0])
     # if turn > TURN:
     #     build_command_ordered = build_command_ordered[:max(coins // 2, 10)]
-    return [build_command[1] for build_command in build_command_ordered]
+
+    used_set = set()
+
+    build_command_tmp = [build[1] for build in build_command_ordered]
+    build_command: tp.List[models.Build] = []
+    for item in build_command_tmp:
+        if (item.point.x, item.point.y) in used_set:
+            continue
+
+        if turn < 175 and game_map._map[item.point.x, item.point.y] != map_lib.PointType.EMPTY.value:
+            used_set.add((item.point.x, item.point.y))
+            continue
+
+        used_set.add((item.point.x, item.point.y))
+        build_command.append(item)
+
+    return build_command

@@ -15,6 +15,16 @@ def get_move_base(game_map: map_lib.Map) -> models.MoveBase:
     main_base_pos = main_base.point
     base_pos_x, base_pos_y = int(main_base_pos[0]), int(main_base_pos[1])
 
-    x, y = game_map.find_save_point()
+    turn = game_map._info.turn
+    if turn <= 100:
+        return models.MoveBase(int(base_pos_x), int(base_pos_y))
 
+    safe_point = game_map.find_save_point()
+    if not safe_point:
+        print()
+        print('RECIEVED NONE!!!!!!!!')
+        print()
+        return models.MoveBase(int(base_pos_x), int(base_pos_y))
+
+    x, y = safe_point
     return models.MoveBase(int(x), int(y))

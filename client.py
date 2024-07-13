@@ -31,8 +31,10 @@ class Method(enum.Enum):
 
 
 class Client():
-    def __init__(self, period_call = 0.25) -> None:
+    def __init__(self, is_prod: bool = False, period_call = 0.25) -> None:
         host = os.getenv('HOST')
+        if is_prod:
+            host = 'https://games.datsteam.dev'
         if host is None:
             raise ValueError('Host not provided!')
         token = os.getenv('TOKEN')

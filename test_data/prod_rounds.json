@@ -1,0 +1,76 @@
+{
+    "gameName": "zombidef",
+    "rounds": [
+        {
+            "name": "final-10",
+            "startAt": "2024-07-13T16:45:00Z",
+            "endAt": "2024-07-13T17:05:00Z",
+            "duration": 1200,
+            "status": "not started"
+        },
+        {
+            "name": "final-9",
+            "startAt": "2024-07-13T16:20:00Z",
+            "endAt": "2024-07-13T16:40:00Z",
+            "duration": 1200,
+            "status": "not started"
+        },
+        {
+            "name": "final-8",
+            "startAt": "2024-07-13T15:55:00Z",
+            "endAt": "2024-07-13T16:15:00Z",
+            "duration": 1200,
+            "status": "not started"
+        },
+        {
+            "name": "final-7",
+            "startAt": "2024-07-13T15:30:00Z",
+            "endAt": "2024-07-13T15:50:00Z",
+            "duration": 1200,
+            "status": "not started"
+        },
+        {
+            "name": "final-6",
+            "startAt": "2024-07-13T15:05:00Z",
+            "endAt": "2024-07-13T15:25:00Z",
+            "duration": 1200,
+            "status": "not started"
+        },
+        {
+            "name": "final-5",
+            "startAt": "2024-07-13T14:40:00Z",
+            "endAt": "2024-07-13T15:00:00Z",
+            "duration": 1200,
+            "status": "not started"
+        },
+        {
+            "name": "final-4",
+            "startAt": "2024-07-13T14:15:00Z",
+            "endAt": "2024-07-13T14:35:00Z",
+            "duration": 1200,
+            "status": "not started"
+        },
+        {
+            "name": "final-3",
+            "startAt": "2024-07-13T13:50:00Z",
+            "endAt": "2024-07-13T14:10:00Z",
+            "duration": 1200,
+            "status": "not started"
+        },
+        {
+            "name": "final-2",
+            "startAt": "2024-07-13T13:25:00Z",
+            "endAt": "2024-07-13T13:45:00Z",
+            "duration": 1200,
+            "status": "not started"
+        },
+        {
+            "name": "final-1",
+            "startAt": "2024-07-13T13:00:00Z",
+            "endAt": "2024-07-13T13:20:00Z",
+            "duration": 1200,
+            "status": "ended"
+        }
+    ],
+    "now": "2024-07-13T13:22:24.903195651Z"
+}
