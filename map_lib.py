@@ -61,15 +61,15 @@ class Map():
         self._info = self._store.get_game_info()
 
         self._init_point = self.get_base_center()
-        self._map = self._build_map()
+        self.__map = self._build_map()
 
     def get_visible_map(self):
-        rows, cols = np.where(np.isin(self._map, self.DYNAMIC_GROUP))
+        rows, cols = np.where(np.isin(self.__map, self.DYNAMIC_GROUP))
 
         min_row, max_row = min(rows), max(rows)
         min_col, max_col = min(cols), max(cols)
 
-        return self._map[min_row:max_row+1, min_col:max_col+1]
+        return self.__map[min_row:max_row+1, min_col:max_col+1]
 
     def get_base_center(self) -> npt.NDArray[np.int32]:
         if len(self._base.blocks) == 0:
@@ -83,33 +83,42 @@ class Map():
                                 for spot in self._zombie_spots]).argmin()
         return self._zombie_spots[nearest_idx]
 
+    def get_neighbours_count(self, x: int, y: int) -> int:
+        counter = 0
+        x_max, y_max = self.__map.shape
+        for delta_x in range(-2, 3):
+            for delta_y in range(-2, 3):
+                if self.is_our_base(max(min(x + delta_x, x_max), 0), max(min(y + delta_y, y_max), 0)):
+                    counter += 1
+        return counter
+
     def is_point_available_to_build(self, x: int, y: int):
         # В отрицательную зону нельзя
         if x < 0 or y < 0:
             return False
         # Не на своей базе
-        if self._map[x][y] in self.OUR_GROUP:
+        if self.__map[x][y] in self.OUR_GROUP:
             return False
         # Не на зомби или споте
-        if self._map[x][y] in self.ZOMBIE_GROUP:
+        if self.__map[x][y] in self.ZOMBIE_GROUP:
             return False
         x_coords = [
-            min(x+1, np.shape(self._map)[0]),
+            min(x+1, np.shape(self.__map)[0]),
             max(x-1, 0),
         ]
         y_coords = [
-            min(y+1, np.shape(self._map)[1]),
+            min(y+1, np.shape(self.__map)[1]),
             max(y-1, 0),
         ]
         # Должны прижаты к своей базе
         if not any(
-            self._map[x][y] in self.OUR_GROUP
+            self.__map[x][y] in self.OUR_GROUP
             for x, y in itertools.product(x_coords, y_coords)
         ):
             return False
         # Не прижаты к споту
         if any(
-            self._map[x][y] == PointType.ZOMBIE_SPAWN
+            self.__map[x][y] == PointType.ZOMBIE_SPAWN
             for x, y in itertools.product(x_coords, y_coords)
         ):
             return False
@@ -117,12 +126,15 @@ class Map():
         x_coords.append(x)
         y_coords.append(y)
         if any(
-            self._map[x][y] in self.ENEMY_GROUP
+            self.__map[x][y] in self.ENEMY_GROUP
             for x, y in itertools.product(x_coords, y_coords)
         ):
             return False
 
         return True
+
+    def is_our_base(self, x: int, y: int):
+        return self.__map[x][y] in self.OUR_GROUP
 
     def _build_static_map(self, reserve_multiplier: int):
         points = list[npt.NDArray[np.int32]]()

@@ -10,16 +10,6 @@ import utils
 random.seed(42)
 
 
-def _get_neighbours_count(game_map: map_lib.Map, x: int, y: int) -> int:
-    counter = 0
-    x_max, y_max = game_map._map.shape
-    for delta_x in range(-2, 3):
-        for delta_y in range(-2, 3):
-            if game_map._map[max(min(x + delta_x, x_max), 0), max(min(y + delta_y, y_max), 0)] in (map_lib.PointType.MY_BASE, map_lib.PointType.MY_CAPITAL):
-                counter += 1
-    return counter
-
-
 def get_build(game_map: map_lib.Map) -> tp.List[models.Build]:
     coins = game_map._info.gold
     build_command_ordered: tp.List[tp.Tuple[int, models.Build]] = []
@@ -39,10 +29,12 @@ def get_build(game_map: map_lib.Map) -> tp.List[models.Build]:
         ]
 
         for new_x, new_y in new_coords:
-            # neighbours_count = _get_neighbours_count(game_map, new_x, new_y)
-            distance = int(utils.calc_range(main_base_pos, np.array([new_x, new_y])))
+            # neighbours_count = game_map.get_neighbours_count(new_x, new_y)
+            distance = int(utils.calc_range(
+                main_base_pos, np.array([new_x, new_y])))
             # build_command_ordered.append((neighbours_count, models.Build(models.Point(new_x, new_y))))
-            build_command_ordered.append((distance, models.Build(models.Point(new_x, new_y))))
+            build_command_ordered.append(
+                (distance, models.Build(models.Point(new_x, new_y))))
 
     # random.shuffle(build_command)
 
