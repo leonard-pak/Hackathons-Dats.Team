@@ -1,6 +1,6 @@
 from client import Client
 import models as m
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import numpy as np
 import numpy.typing as npt
 from collections import defaultdict
@@ -41,7 +41,7 @@ class EnemyBlock:
 
 @dataclass
 class Enemy:
-    blocks: list[EnemyBlock] = []
+    blocks: list[EnemyBlock] = field(default_factory=lambda: list())
     head_idx: int = 0
 
 

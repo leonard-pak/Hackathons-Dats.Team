@@ -29,6 +29,9 @@ cmap = mpl_col.ListedColormap([color.value for color in MapColors])
 def visualize_map(game_map: np.ndarray):
     x_size, y_size = game_map.shape
 
+    plt.ion()
+    plt.show()
+
     plt.imshow(game_map, origin='lower', extent=(
         0, x_size, 0, y_size), vmin=0, vmax=len(cmap.colors), cmap=cmap)
 
@@ -45,6 +48,7 @@ def visualize_map(game_map: np.ndarray):
     plt.tick_params(axis='both', which='both', length=0)
     plt.title("Game Map")
     plt.show()
+    plt.pause(0.001)
 
 
 def _main():

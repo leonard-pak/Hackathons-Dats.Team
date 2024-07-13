@@ -2,6 +2,7 @@ import dataclasses
 import random
 import typing as tp
 
+import map as map_lib
 import models
 import visualize
 
@@ -19,12 +20,12 @@ SHIFT_BY_DIRECTION: tp.Dict[models.ZombieDirection, tp.Tuple[int, int]] = {
 }
 
 COLLIDE_OBJECTS = {
-    visualize.MapNumbers.ZOMBIE_SPAWN.value,
-    visualize.MapNumbers.WALL.value,
-    visualize.MapNumbers.ENEMY_BASE.value,
-    visualize.MapNumbers.ENEMY_CAPITAL.value,
-    visualize.MapNumbers.MY_BASE.value,
-    visualize.MapNumbers.MY_CAPITAL.value,
+    map_lib.PointType.ZOMBIE_SPAWN.value,
+    map_lib.PointType.WALL.value,
+    map_lib.PointType.ENEMY_BASE.value,
+    map_lib.PointType.ENEMY_CAPITAL.value,
+    map_lib.PointType.MY_BASE.value,
+    map_lib.PointType.MY_CAPITAL.value,
 }
 
 
@@ -39,8 +40,8 @@ class Zombie(models.Zombie):
         return ZombieNormal(**kwargs)
 
     def _move(self, game_map) -> tp.Tuple[int, int]:
-        if self.wait_turns > 0:
-            self.wait_turns -= 1
+        if self.waitTurns > 0:
+            self.waitTurns -= 1
             return self.x, self.y
 
         x_diff, y_diff = SHIFT_BY_DIRECTION[self.direction]
@@ -106,19 +107,19 @@ class ZombieSpot(models.ZombieSpot):
             id=f'x{self.x}_y{self.y}_id{self._spawned_zombies}',
             speed=1,
             type=zombie_type,
-            wait_turns=1,
+            waitTurns=1,
             x=self.x + x_diff,
             y=self.y + y_diff,
         )
 
     def init_possible_directions(self, game_map) -> None:
-        if game_map[self.x][self.y - 1] != visualize.MapNumbers.ZOMBIE_SPAWN.value:
+        if game_map[self.x][self.y - 1] != map_lib.PointType.ZOMBIE_SPAWN.value:
             self._possible_directions.append(models.ZombieDirection.TOP)
-        if game_map[self.x][self.y + 1] != visualize.MapNumbers.ZOMBIE_SPAWN.value:
+        if game_map[self.x][self.y + 1] != map_lib.PointType.ZOMBIE_SPAWN.value:
             self._possible_directions.append(models.ZombieDirection.BOTTOM)
-        if game_map[self.x + 1][self.y] != visualize.MapNumbers.ZOMBIE_SPAWN.value:
+        if game_map[self.x + 1][self.y] != map_lib.PointType.ZOMBIE_SPAWN.value:
             self._possible_directions.append(models.ZombieDirection.RIGHT)
-        if game_map[self.x - 1][self.y] != visualize.MapNumbers.ZOMBIE_SPAWN.value:
+        if game_map[self.x - 1][self.y] != map_lib.PointType.ZOMBIE_SPAWN.value:
             self._possible_directions.append(models.ZombieDirection.LEFT)
 
     def process_round(self, turn_number: int) -> tp.Optional[Zombie]:

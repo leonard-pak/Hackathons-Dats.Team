@@ -3,6 +3,7 @@ import typing as tp
 
 import numpy as np
 
+import map as map_lib
 from simulator import simulator_models
 import visualize
 
@@ -12,15 +13,15 @@ with open('test_data/world.json') as file:
     zombie_spots = [simulator_models.ZombieSpot.from_record(record) for record in records['zpots'] if record['type'] == 'default']
 
 for zombie_spot in zombie_spots:
-    zombie_spot.x -= 140
-    zombie_spot.y -= 180
+    zombie_spot.x -= 0
+    zombie_spot.y -= 0
 
-game_map = np.zeros((40, 40))
+game_map = np.zeros((150, 150))
 
-game_map[:1] = visualize.MapNumbers.WALL
-game_map[-1:] = visualize.MapNumbers.WALL
-game_map[:, :1] = visualize.MapNumbers.WALL
-game_map[:, -1:] = visualize.MapNumbers.WALL
+game_map[:1] = map_lib.PointType.WALL
+game_map[-1:] = map_lib.PointType.WALL
+game_map[:, :1] = map_lib.PointType.WALL
+game_map[:, -1:] = map_lib.PointType.WALL
 
 for spot in zombie_spots:
     spot.init_possible_directions(game_map)
@@ -33,7 +34,7 @@ for step in range(10):
     turn_number += 1
 
     for spot in zombie_spots:
-        game_map[spot.x, spot.y] = visualize.MapNumbers.ZOMBIE_SPAWN
+        game_map[spot.x, spot.y] = map_lib.PointType.ZOMBIE_SPAWN
 
     for zombie in zombies:
         zombie_x, zombie_y = zombie.process_round(game_map)
@@ -43,9 +44,9 @@ for step in range(10):
 
     zombies = [zombie for zombie in zombies if zombie.health > 0]
 
-    game_map[np.where(game_map == visualize.MapNumbers.ZOMBIE)] = visualize.MapNumbers.EMPTY
+    game_map[np.where(game_map == map_lib.PointType.ZOMBIE)] = map_lib.PointType.EMPTY
     for zombie in zombies:
-        game_map[zombie.x, zombie.y] = visualize.MapNumbers.ZOMBIE
+        game_map[zombie.x, zombie.y] = map_lib.PointType.ZOMBIE
 
     for zombie_spot in zombie_spots:
         new_zombie = zombie_spot.process_round(turn_number)
