@@ -91,7 +91,7 @@ class Map():
             total_x += block_pos_x
             total_y += block_pos_y
 
-        return (total_x // count, total_y // count)
+        return (round(total_x / count), round(total_y / count))
 
     def get_nearest_spot(self):
         nearest_idx = np.array([np.abs(spot.point - self._init_point).sum()
