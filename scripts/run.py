@@ -111,6 +111,7 @@ def main():
     game_map = map_lib.Map(store=game_store, reserve_multiplier=fresh_config.get_config()[
         'map_reserve_multiplier'])
 
+    visualize.visualize_map(game_map=game_map.get_map())
     cur_turn: int = -1
 
     while True:
@@ -122,7 +123,7 @@ def main():
         game_map.update()
         logger.info('Map updated')
 
-        visualize.visualize_map(game_map=game_map.get_map())
+        # visualize.visualize_map(game_map=game_map.get_map())
         logger.info('Visualizated')
 
         # TODO: strategy here

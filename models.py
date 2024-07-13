@@ -19,6 +19,8 @@ class BaseModel():
 
     @classmethod
     def from_list_record(cls: tp.Type[BaseModelT], records: tp.List[tp.Dict]) -> tp.List['BaseModelT']:
+        if not records:
+            return []
         return [cls.from_record(record) for record in records]
 
 

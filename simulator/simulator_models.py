@@ -2,7 +2,7 @@ import dataclasses
 import random
 import typing as tp
 
-import map as map_lib
+import map_lib
 import models
 import visualize
 

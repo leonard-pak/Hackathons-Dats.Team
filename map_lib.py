@@ -27,7 +27,7 @@ class Map():
             reserve_multiplier=reserve_multiplier)
 
         self.update()
-        self._init_point = self.get_base_center()
+        # self._init_point = self.get_base_center()
 
     def update(self):
         self._store.sync()
@@ -47,10 +47,10 @@ class Map():
     def get_base_center(self) -> npt.NDArray[np.int32]:
         return np.array([block.point for _, block in self._base.blocks.items()]).mean(axis=1)
 
-    def get_nearest_spot(self):
-        nearest_idx = np.array([np.abs(spot.point - self._init_point).sum()
-                                for spot in self._zombie_spots]).argmin()
-        return self._zombie_spots[nearest_idx]
+    # def get_nearest_spot(self):
+    #     nearest_idx = np.array([np.abs(spot.point - self._init_point).sum()
+    #                             for spot in self._zombie_spots]).argmin()
+    #     return self._zombie_spots[nearest_idx]
 
     def is_point_available(self, x: int, y: int):
         # TODO проверять в соотвествие с правилами
@@ -72,7 +72,9 @@ class Map():
         map_idx_shifts = (scales - max_x_y - min_x_y) / 2
         # TODO В какую сторону лучше округлять? Уже засыпаю
         map_idx_shifts = np.round(map_idx_shifts).astype(int)
+        map_idx_shifts = np.array([0, 0])
         static_map = np.zeros((scales[0], scales[1]))
+        static_map = np.zeros((30, 30))
         for point_coord, point_type in zip(points, types):
             idxes = point_coord + map_idx_shifts
             static_map[idxes[0]][idxes[1]] = point_type

@@ -62,12 +62,11 @@ class Store:
         # Вызываем один раз за весь раунд. Не меняется
         world_record = self._client.get_world()
         self._spots = [m.ZombieSpot.from_record(
-            record) for record in world_record['zspots'] if record['type'] == m.ZombieSpot.type]
+            record) for record in world_record['zpots'] if record['type'] == m.ZombieSpot.type]
         self._walls = [m.Wall.from_record(
-            record) for record in world_record['zspots'] if record['type'] == m.Wall.type]
+            record) for record in world_record['zpots'] if record['type'] == m.Wall.type]
         # TODO не используется
-        self._round_name = m.RealmName.from_record(
-            world_record['realmName'])
+        self._round_name = m.RealmName.from_record({'realmName': world_record['realmName']})
 
     def sync(self):
         turn_info = self._client.get_units()
@@ -77,15 +76,14 @@ class Store:
         # TODO не используется
         self._player = m.Player.from_record(turn_info['player'])
         # TODO не используется
-        self._last_round_name = m.RealmName.from_record(
-            turn_info['realmName'])
-        # TODO не используется
-        self._turn = m.Turn.from_record(
-            turn_info['turn'])
-        # TODO не используется
-        self._ms_to_end = m.TurnEndsInMs.from_record(
-            turn_info['turnEndsInMs'])
-        # TODO не используется
+        # self._last_round_name = m.RealmName.from_record(
+        #     {'realmName': turn_info['realmName']})
+        # # TODO не используется
+        # self._turn = m.Turn.from_record(
+        #     {'turn': turn_info['turn']})
+        # # TODO не используется
+        # self._ms_to_end = m.TurnEndsInMs.from_record(
+        #     {'turnEndsInMs': turn_info['turnEndsInMs']})
         self._zombies = m.Zombie.from_list_record(turn_info['zombies'])
 
     def get_spots(self):

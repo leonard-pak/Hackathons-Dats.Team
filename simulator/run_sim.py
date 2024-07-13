@@ -3,7 +3,7 @@ import typing as tp
 
 import numpy as np
 
-import map as map_lib
+import map_lib
 from simulator import simulator_models
 import visualize
 
