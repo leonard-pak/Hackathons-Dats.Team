@@ -1,7 +1,9 @@
+import datetime as dt
 import dataclasses
 import enum
 import typing as tp
 
+import utils
 
 BaseModelT = tp.TypeVar('BaseModelT', bound='BaseModel')
 
@@ -28,7 +30,7 @@ class Point(BaseModel):
 
 @dataclasses.dataclass
 class Attack(BaseModel):
-    block_id: str
+    blockId: str
     target: Point
 
 
@@ -55,7 +57,7 @@ class BaseItem(BaseModel):
 
     @classmethod
     def from_record(cls, record: tp.Dict) -> 'BaseItem':
-        last_attack = record.pop('last_attack')
+        last_attack = record.pop('lastAttack')
         record['last_attack'] = Point(**last_attack)
         return cls(**record)
 
@@ -72,19 +74,22 @@ class EnemyBaseItem(BaseModel):
 
     @classmethod
     def from_record(cls, record: tp.Dict) -> 'EnemyBaseItem':
-        last_attack = record.pop('last_attack')
+        last_attack = record.pop('lastAttack')
         record['last_attack'] = Point(**last_attack)
         return cls(**record)
 
 
 @dataclasses.dataclass
 class Player(BaseModel):
-    enemy_block_kills: int
-    game_ended_at: str
+    enemyBlockKills: int
+    gameEndedAt: str
     gold: int
     name: str
     points: int
-    zombie_kills: int
+    zombieKills: int
+
+    def __post_init__(self):
+        self.game_ended_at = utils.str_to_datetime(self.gameEndedAt)
 
 
 class ZombieTypes(str, enum.Enum):
@@ -111,14 +116,14 @@ class Zombie(BaseModel):
     id: str
     speed: int
     type: ZombieTypes
-    wait_turns: int
+    waitTurns: int
     x: int
     y: int
 
 
 @dataclasses.dataclass
 class RealmName(BaseModel):
-    realm_name: str
+    realmName: str
 
 
 @dataclasses.dataclass
@@ -128,7 +133,7 @@ class Turn(BaseModel):
 
 @dataclasses.dataclass
 class TurnEndsInMs(BaseModel):
-    turn_ends_in_ms: int
+    turnEndsInMs: int
 
 
 @dataclasses.dataclass
@@ -148,8 +153,12 @@ class Wall(BaseModel):
 @dataclasses.dataclass
 class Round(BaseModel):
     duration: int
-    end_at: str
+    endAt: str
+    startAt: str
     name: str
-    repeat: int
-    start_at: str
     status: str
+    repeat: int = 0
+
+    def __post_init__(self):
+        self.end_at = utils.str_to_datetime(self.endAt)
+        self.start_at = utils.str_to_datetime(self.startAt)

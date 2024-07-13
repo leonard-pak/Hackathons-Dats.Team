@@ -6,7 +6,7 @@ import enum
 import copy
 
 
-class PointType(enum.Enum):
+class PointType(int, enum.Enum):
     EMPTY = 0
     ZOMBIE = 1
     ZOMBIE_SPAWN = 2
