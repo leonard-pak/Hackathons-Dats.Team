@@ -49,16 +49,22 @@ class BaseItem(BaseModel):
     attack: int
     health: int
     id: str
-    last_attack: Point
+    last_attack: tp.Optional[Point]
     range: int
     x: int
     y: int
     isHead: bool = False
 
+    def __post_init__(self):
+        self.isHead = self.attack == 40
+
     @classmethod
     def from_record(cls, record: tp.Dict) -> 'BaseItem':
         last_attack = record.pop('lastAttack')
-        record['last_attack'] = Point(**last_attack)
+        if last_attack is None:
+            record['last_attack'] = None
+        else:
+            record['last_attack'] = Point(**last_attack)
         return cls(**record)
 
 
@@ -66,15 +72,22 @@ class BaseItem(BaseModel):
 class EnemyBaseItem(BaseModel):
     attack: int
     health: int
-    last_attack: Point
+    last_attack: tp.Optional[Point]
     name: str
     x: int
     y: int
     isHead: bool = False
 
+    def __post_init__(self):
+        self.isHead = self.attack == 40
+
     @classmethod
     def from_record(cls, record: tp.Dict) -> 'EnemyBaseItem':
         last_attack = record.pop('lastAttack')
+        if last_attack is None:
+            record['last_attack'] = None
+        else:
+            record['last_attack'] = Point(**last_attack)
         record['last_attack'] = Point(**last_attack)
         return cls(**record)
 
