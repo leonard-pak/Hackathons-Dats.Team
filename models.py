@@ -102,8 +102,8 @@ class ZombieTypes(str, enum.Enum):
 
 
 class ZombieDirection(str, enum.Enum):
-    TOP = 'top'
-    BOTTOM = 'bottom'
+    TOP = 'up'
+    BOTTOM = 'down'
     RIGHT = 'right'
     LEFT = 'left'
 

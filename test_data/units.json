@@ -1,16 +1,420 @@
 {
-    "realmName": "test-day1-7",
+    "realmName": "test-day2-1",
     "player": {
         "gold": 10,
         "points": 0,
         "name": "Hikikomori vs Zombies",
         "zombieKills": 0,
         "enemyBlockKills": 0,
-        "gameEndedAt": "2024-07-12T18:06:24.096775262Z"
+        "gameEndedAt": null
     },
-    "base": null,
-    "zombies": null,
-    "enemyBlocks": null,
-    "turnEndsInMs": 407,
-    "turn": 123
+    "base": [
+        {
+            "id": "0190aae8-c5d9-797f-a825-fc1df272c519",
+            "x": 52,
+            "y": 112,
+            "health": 300,
+            "attack": 40,
+            "range": 8,
+            "isHead": true,
+            "lastAttack": null
+        },
+        {
+            "id": "0190aae8-c5d9-79db-8213-471039613d8e",
+            "x": 53,
+            "y": 113,
+            "health": 100,
+            "attack": 10,
+            "range": 5,
+            "lastAttack": null
+        },
+        {
+            "id": "0190aae8-c5d9-79d8-b59e-621cf5d88684",
+            "x": 52,
+            "y": 113,
+            "health": 100,
+            "attack": 10,
+            "range": 5,
+            "lastAttack": null
+        },
+        {
+            "id": "0190aae8-c5d9-79d5-bd56-3448bd07be0e",
+            "x": 53,
+            "y": 112,
+            "health": 99,
+            "attack": 10,
+            "range": 5,
+            "lastAttack": null
+        }
+    ],
+    "zombies": [
+        {
+            "x": 57,
+            "y": 109,
+            "id": "a53cba0d-cd4a-440f-a897-b3ecd7281def",
+            "type": "bomber",
+            "health": 5,
+            "attack": 1,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "up"
+        },
+        {
+            "x": 49,
+            "y": 122,
+            "id": "a5238fa0-5625-439a-9234-6d3fddcfc496",
+            "type": "normal",
+            "health": 9,
+            "attack": 13,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "left"
+        },
+        {
+            "x": 55,
+            "y": 117,
+            "id": "45667385-2e00-4ae3-90fa-13fdbc22a0e5",
+            "type": "juggernaut",
+            "health": 9,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "left"
+        },
+        {
+            "x": 62,
+            "y": 109,
+            "id": "156d3f66-0cd5-450a-b195-23a9eea99e54",
+            "type": "juggernaut",
+            "health": 9,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 2,
+            "direction": "down"
+        },
+        {
+            "x": 58,
+            "y": 110,
+            "id": "0c2e31c1-4149-4699-827a-74d6fd27f2f4",
+            "type": "juggernaut",
+            "health": 9,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 2,
+            "direction": "down"
+        },
+        {
+            "x": 56,
+            "y": 119,
+            "id": "f6df83e1-538a-498a-a78f-200c9c476040",
+            "type": "chaos_knight",
+            "health": 7,
+            "attack": 7,
+            "speed": 3,
+            "waitTurns": 1,
+            "direction": "down"
+        },
+        {
+            "x": 61,
+            "y": 111,
+            "id": "5dda0db9-f874-41f4-8996-4920585077a1",
+            "type": "juggernaut",
+            "health": 9,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "down"
+        },
+        {
+            "x": 56,
+            "y": 107,
+            "id": "522dd756-ff91-42b3-b0e5-30f1343cc552",
+            "type": "liner",
+            "health": 7,
+            "attack": 7,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "left"
+        },
+        {
+            "x": 43,
+            "y": 111,
+            "id": "64ebbddd-d389-4355-b639-e7ecd31acc32",
+            "type": "liner",
+            "health": 9,
+            "attack": 13,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "up"
+        },
+        {
+            "x": 57,
+            "y": 102,
+            "id": "a76a839c-46c9-4150-bbbe-aee035a31114",
+            "type": "chaos_knight",
+            "health": 9,
+            "attack": 13,
+            "speed": 3,
+            "waitTurns": 1,
+            "direction": "right"
+        },
+        {
+            "x": 58,
+            "y": 112,
+            "id": "e508978c-5546-4a37-b652-a44014230c6b",
+            "type": "chaos_knight",
+            "health": 7,
+            "attack": 7,
+            "speed": 3,
+            "waitTurns": 1,
+            "direction": "down"
+        },
+        {
+            "x": 48,
+            "y": 121,
+            "id": "79a91c45-3b93-4730-afdf-9829fefd53c1",
+            "type": "juggernaut",
+            "health": 9,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "down"
+        },
+        {
+            "x": 45,
+            "y": 115,
+            "id": "f41e17d4-03e3-451a-8297-bcb0e485f672",
+            "type": "normal",
+            "health": 9,
+            "attack": 13,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "up"
+        },
+        {
+            "x": 42,
+            "y": 117,
+            "id": "ab8cc71d-3835-45d1-a472-70952d413771",
+            "type": "chaos_knight",
+            "health": 9,
+            "attack": 13,
+            "speed": 3,
+            "waitTurns": 1,
+            "direction": "down"
+        },
+        {
+            "x": 61,
+            "y": 107,
+            "id": "28f01566-8167-470b-9113-53914952bf05",
+            "type": "juggernaut",
+            "health": 9,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 2,
+            "direction": "down"
+        },
+        {
+            "x": 44,
+            "y": 112,
+            "id": "fcb0da1d-119b-4e2b-b0e1-be9f2b4154e2",
+            "type": "liner",
+            "health": 9,
+            "attack": 13,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "up"
+        },
+        {
+            "x": 47,
+            "y": 123,
+            "id": "1f7496ee-fc6b-495b-af8e-623bedc9244c",
+            "type": "chaos_knight",
+            "health": 9,
+            "attack": 13,
+            "speed": 3,
+            "waitTurns": 1,
+            "direction": "left"
+        },
+        {
+            "x": 43,
+            "y": 109,
+            "id": "6223ed23-97e5-41e0-abfa-02fd5daa911a",
+            "type": "juggernaut",
+            "health": 7,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "up"
+        },
+        {
+            "x": 53,
+            "y": 123,
+            "id": "18fed6ac-9ce3-4758-a49d-a830e381ce83",
+            "type": "liner",
+            "health": 9,
+            "attack": 13,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "left"
+        },
+        {
+            "x": 59,
+            "y": 102,
+            "id": "c9a24eaa-1b26-477c-ab97-00695be02dee",
+            "type": "bomber",
+            "health": 7,
+            "attack": 7,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "left"
+        },
+        {
+            "x": 56,
+            "y": 116,
+            "id": "a4cd60ef-45e4-4f77-ac81-99668bd55f00",
+            "type": "juggernaut",
+            "health": 9,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 2,
+            "direction": "left"
+        },
+        {
+            "x": 47,
+            "y": 115,
+            "id": "2ff1a4f0-7a04-400f-ae82-7208bcca53d6",
+            "type": "juggernaut",
+            "health": 9,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "up"
+        },
+        {
+            "x": 47,
+            "y": 116,
+            "id": "7e852a5e-585d-4019-b71e-70c4399ffbe9",
+            "type": "juggernaut",
+            "health": 9,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 2,
+            "direction": "up"
+        },
+        {
+            "x": 44,
+            "y": 111,
+            "id": "2f2db155-939f-4459-ab02-3eb0e9e5c159",
+            "type": "liner",
+            "health": 11,
+            "attack": 19,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "left"
+        },
+        {
+            "x": 44,
+            "y": 122,
+            "id": "fd8e12de-6b51-425a-9a32-80c9778006a3",
+            "type": "juggernaut",
+            "health": 5,
+            "attack": 999999,
+            "speed": 1,
+            "waitTurns": 1,
+            "direction": "right"
+        }
+    ],
+    "enemyBlocks": [
+        {
+            "x": 51,
+            "y": 104,
+            "health": 100,
+            "attack": 10,
+            "lastAttack": {
+                "x": 55,
+                "y": 106
+            }
+        },
+        {
+            "x": 51,
+            "y": 105,
+            "health": 100,
+            "attack": 10,
+            "lastAttack": {
+                "x": 55,
+                "y": 106
+            }
+        },
+        {
+            "x": 51,
+            "y": 103,
+            "health": 100,
+            "attack": 10,
+            "lastAttack": null
+        },
+        {
+            "x": 50,
+            "y": 103,
+            "health": 100,
+            "attack": 10,
+            "lastAttack": null
+        },
+        {
+            "x": 51,
+            "y": 102,
+            "health": 100,
+            "attack": 10,
+            "lastAttack": null
+        },
+        {
+            "x": 52,
+            "y": 107,
+            "health": 100,
+            "attack": 10,
+            "lastAttack": null
+        },
+        {
+            "x": 51,
+            "y": 106,
+            "health": 100,
+            "attack": 10,
+            "lastAttack": {
+                "x": 55,
+                "y": 106
+            }
+        },
+        {
+            "x": 51,
+            "y": 108,
+            "health": 100,
+            "attack": 10,
+            "lastAttack": null
+        },
+        {
+            "x": 50,
+            "y": 102,
+            "health": 100,
+            "attack": 10,
+            "lastAttack": null
+        },
+        {
+            "x": 51,
+            "y": 107,
+            "health": 100,
+            "attack": 10,
+            "lastAttack": {
+                "x": 55,
+                "y": 106
+            }
+        },
+        {
+            "x": 50,
+            "y": 104,
+            "health": 100,
+            "attack": 10,
+            "lastAttack": null
+        }
+    ],
+    "turnEndsInMs": 1173,
+    "turn": 34
 }

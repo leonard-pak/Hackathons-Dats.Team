@@ -62,6 +62,9 @@ def send_participation(game_client: client.Client) -> int:
     try:
         return response['startsInSec']
     except KeyError:
+        if response['errCode'] == 1001:
+            if 'you are participating in this realm' in response['error']:
+                return 0
         msg = f'Error in participate {response}'
         logger.error(msg)
         raise Exception(msg)
