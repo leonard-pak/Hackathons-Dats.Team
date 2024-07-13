@@ -12,6 +12,8 @@ import store
 import map_lib
 import config
 import visualize
+from strategy import attacker
+from strategy import builder
 
 DTTM_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
 
@@ -25,7 +27,7 @@ logging.basicConfig(
     level=logging.DEBUG
 )
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 handler = logging.handlers.RotatingFileHandler(
     f'logs/{start_time.strftime("%H-%M-%S")}.log', maxBytes=(1048576*5), backupCount=7,
 )
@@ -122,17 +124,19 @@ def main():
         game_map.update()
         logger.info('Map updated')
 
-        visualize.visualize_map(game_map=game_map.get_visible_map())
-        logger.info('Visualizated')
-
-        # TODO: strategy here
-        attack = ...
-        build = ...
-        move_base = ...
+        # Strategy here
+        base_center = game_map._base.blocks[game_map._base.head_key].point
+        attack = attacker.get_attack(game_map)
+        build = builder.get_build(game_map)
+        move_base = models.MoveBase(x=base_center[0], y=base_center[1])
         logger.info('Strategy calculated')
 
-        # response = game_client.post_commands(attack, build, move_base)
+        response = game_client.post_commands(attack, build, move_base)
         logger.info('Strategy sent')
+
+        # Visualization
+        visualize.visualize_map(game_map=game_map.get_visible_map())
+        logger.info('Visualizated')
 
 
 if __name__ == '__main__':

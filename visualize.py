@@ -33,17 +33,17 @@ def visualize_map(game_map: np.ndarray):
         0, x_size, 0, y_size), vmin=0, vmax=len(cmap.colors), cmap=cmap)
 
     # Добавление сетки клеток
-    plt.grid(which='both', color='black', linestyle='-', linewidth=1)
+    # plt.grid(which='both', color='black', linestyle='-', linewidth=1)
 
     # Настройка интервалов сетки с учетом смещения
-    plt.xticks(np.arange(0, x_size, 1))
-    plt.yticks(np.arange(0, y_size, 1))
+    # plt.xticks(np.arange(0, x_size, 1))
+    # plt.yticks(np.arange(0, y_size, 1))
 
-    plt.grid(which='minor', color='black', linestyle='-', linewidth=1)
+    # plt.grid(which='minor', color='black', linestyle='-', linewidth=1)
 
     # Убираем метки осей
-    plt.tick_params(axis='both', which='both', length=0)
-    plt.title("Game Map")
+    # plt.tick_params(axis='both', which='both', length=0)
+    # plt.title("Game Map")
 
     plt.draw()
     plt.pause(0.001)
