@@ -2,17 +2,27 @@ import typing as tp
 
 import numpy as np
 
+import config
 import map_lib
 import models
 import utils
 
 
-def _add_attack_target(attack_targets: tp.Dict, target_pos: tp.Tuple[int, int], target_health: int):
+fresh_config = config.ConfigManager('configs/config_v1.json').get_config()
+
+AGGRO_CONFIG = {
+    'zombie_aggro': fresh_config.get('zombie_aggro', 1),
+    'enemy_aggro': fresh_config.get('enemy_aggro', 1),
+    'enemy_head_aggro': fresh_config.get('enemy_head_aggro', 1),
+}
+
+
+def _add_attack_target(attack_targets: tp.Dict, target_pos: tp.Tuple[int, int], target_health: int, aggro: int = 1):
     if target_pos in attack_targets:
         prev_state = attack_targets[target_pos]
-        attack_targets[target_pos] = (prev_state[0] + 1, max(prev_state[1], target_health))
+        attack_targets[target_pos] = (prev_state[0] + aggro, max(prev_state[1], target_health))
     else:
-        attack_targets[target_pos] = (1, target_health)
+        attack_targets[target_pos] = (aggro, target_health)
 
 
 def _attack_targets(game_map: map_lib.Map) -> tp.Dict[tp.Tuple[int, int], tp.Tuple[int, int]]:
@@ -23,14 +33,15 @@ def _attack_targets(game_map: map_lib.Map) -> tp.Dict[tp.Tuple[int, int], tp.Tup
         zombie_pos = zombie.point
         target_pos = (int(zombie_pos[0]), int(zombie_pos[1]))
         target_health = zombie.health
-        _add_attack_target(attack_targets, target_pos, target_health)
+        _add_attack_target(attack_targets, target_pos, target_health, AGGRO_CONFIG['zombie_aggro'])
 
     for enemy_base in game_map._enemies.values():
         for enemy_block in enemy_base.blocks:
             enemy_pos = enemy_block.point
             target_pos = (int(enemy_pos[0]), int(enemy_pos[1]))
             target_health = enemy_block.health
-            _add_attack_target(attack_targets, target_pos, target_health)
+            aggro = AGGRO_CONFIG['enemy_head_aggro'] if enemy_block.attack == 40 else AGGRO_CONFIG['enemy_aggro']
+            _add_attack_target(attack_targets, target_pos, target_health, aggro)
 
     return attack_targets
 
