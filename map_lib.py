@@ -18,6 +18,14 @@ class PointType(int, enum.Enum):
 
 
 class Map():
+    DYNAMIC_GROUP = [
+        PointType.ZOMBIE,
+        PointType.ENEMY_BASE,
+        PointType.ENEMY_CAPITAL,
+        PointType.MY_BASE,
+        PointType.MY_CAPITAL,
+    ]
+
     def __init__(self, store: Store, reserve_multiplier: int) -> None:
         self._store = store
         self._zombie_spots = self._store.get_spots()
@@ -39,8 +47,13 @@ class Map():
         self._init_point = self.get_base_center()
         self._map = self._build_map()
 
-    def get_map(self):
-        return self._map
+    def get_visible_map(self):
+        rows, cols = np.where(np.isin(self._map, self.DYNAMIC_GROUP))
+
+        min_row, max_row = min(rows), max(rows)
+        min_col, max_col = min(cols), max(cols)
+
+        return self._map[min_row:max_row+1, min_col:max_col+1]
 
     def get_base_center(self) -> npt.NDArray[np.int32]:
         if len(self._base.blocks) == 0:
