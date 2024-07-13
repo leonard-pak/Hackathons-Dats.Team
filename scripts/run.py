@@ -1,5 +1,6 @@
 import datetime as dt
 import logging
+import logging.handlers
 import time
 import typing as tp
 import sys
@@ -20,9 +21,15 @@ logging.basicConfig(
     level=logging.DEBUG
 )
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+handler = logging.handlers.RotatingFileHandler(
+    f'logs/{start_time.strftime("%H-%M-%S")}.log', maxBytes=(1048576*5), backupCount=7,
+)
+formatter = logging.Formatter('%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 stdout_handler = logging.StreamHandler(sys.stdout)
-stdout_formatter = logging.Formatter('%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s')
-stdout_handler.setFormatter(stdout_formatter)
+stdout_handler.setFormatter(formatter)
 logger.addHandler(stdout_handler)
 
 
@@ -34,9 +41,9 @@ def get_nearest_round(game_client: client.Client) -> models.Round:
     nearest_round_delta = None
     nearest_round = None
     for round_ in rounds:
-        ts_delta = (round_.start_at - now).total_seconds()
-        if ts_delta < 0:
-            continue
+        ts_delta = abs((round_.start_at - now).total_seconds())
+        # if ts_delta < 0:
+        #     continue
 
         if nearest_round_delta is None or ts_delta < nearest_round_delta:
             nearest_round_delta = ts_delta
@@ -79,11 +86,11 @@ def main():
 
     next_round = get_nearest_round(game_client)
 
-    logger.info(f'Preparing for round: {next_round.name}')
+    logger.info(f'Preparing for round: {next_round.name} {next_round}')
 
     starts_in_sec = send_participation(game_client)
 
-    logger.info(f'Next round starts in {starts_in_sec}')
+    logger.info(f'Registration complete! Next round starts in {starts_in_sec}')
     time.sleep(starts_in_sec)
 
     # ROUND STARTS HERE
@@ -110,7 +117,7 @@ def main():
         move_base = ...
         logger.info('Strategy calculated')
 
-        response = game_client.post_commands(attack, build, move_base)
+        # response = game_client.post_commands(attack, build, move_base)
         logger.info('Strategy sent')
 
 
