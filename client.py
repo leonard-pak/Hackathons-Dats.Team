@@ -32,8 +32,14 @@ class Method(enum.Enum):
 
 class Client():
     def __init__(self, period_call = 0.25) -> None:
-        self._host = os.getenv('HOST')
-        self._token = os.getenv('TOKEN')
+        host = os.getenv('HOST')
+        if host is None:
+            raise ValueError('Host not provided!')
+        token = os.getenv('TOKEN')
+        if token is None:
+            raise ValueError('Token not provided!')
+        self._host = host
+        self._token = token
         self._auth_header = {'X-Auth-Token': self._token}
         self._last_call = time.time()
         self._period_call = period_call
@@ -54,7 +60,7 @@ class Client():
         body = {
             'attack': attack,
             'build': build,
-            'move_base': move_base,
+            'moveBase': move_base,
         }
         response = self._request(Method.POST, url=url, payload=body)
         return json.loads(response.text)
