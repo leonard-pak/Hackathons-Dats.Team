@@ -4,7 +4,7 @@ import matplotlib.colors as mpl_col
 import matplotlib.pyplot as plt
 import numpy as np
 
-from map import PointType
+from map_lib import PointType
 
 
 class MapColors(str, enum.Enum):

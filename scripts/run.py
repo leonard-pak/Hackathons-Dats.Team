@@ -8,6 +8,10 @@ import sys
 import client
 import models
 import utils
+import store
+import map_lib
+import config
+import visualize
 
 DTTM_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
 
@@ -25,7 +29,8 @@ logger.setLevel(logging.DEBUG)
 handler = logging.handlers.RotatingFileHandler(
     f'logs/{start_time.strftime("%H-%M-%S")}.log', maxBytes=(1048576*5), backupCount=7,
 )
-formatter = logging.Formatter('%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s')
+formatter = logging.Formatter(
+    '%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 stdout_handler = logging.StreamHandler(sys.stdout)
@@ -36,7 +41,8 @@ logger.addHandler(stdout_handler)
 def get_nearest_round(game_client: client.Client) -> models.Round:
     response = game_client.get_rounds()
     now = utils.str_to_datetime(response['now'])
-    rounds = [models.Round.from_record(record) for record in response['rounds']]
+    rounds = [models.Round.from_record(record)
+              for record in response['rounds']]
 
     nearest_round_delta = None
     nearest_round = None
@@ -96,11 +102,14 @@ def main():
     logger.info(f'Registration complete! Next round starts in {starts_in_sec}')
     time.sleep(starts_in_sec)
 
+    fresh_config = config.ConfigManager('configs/config_v1.json')
+
     # ROUND STARTS HERE
 
-    response = game_client.get_world()
     logger.info('Got static world')
-    # TODO: init world map
+    game_store = store.Store(client=game_client)
+    game_map = map_lib.Map(store=game_store, reserve_multiplier=fresh_config.get_config()[
+        'map_reserve_multiplier'])
 
     cur_turn: int = -1
 
@@ -110,9 +119,11 @@ def main():
         cur_turn = response['turn']
         logger.info(f'Starting round {cur_turn}')
 
-        # TODO: update world map
-        ...
+        game_map.update()
         logger.info('Map updated')
+
+        visualize.visualize_map(game_map=game_map.get_map())
+        logger.info('Visualizated')
 
         # TODO: strategy here
         attack = ...

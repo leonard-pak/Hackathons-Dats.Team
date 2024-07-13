@@ -30,12 +30,16 @@ class Map():
         self._init_point = self.get_base_center()
 
     def update(self):
+        self._store.sync()
         self._base = self._store.get_base()
         self._enemies = self._store.get_enemies()
         self._zombies = self._store.get_zombies()
         # TODO Дополучать всё остальное на карту
 
         self._map = self._build_map()
+
+    def get_map(self):
+        return self._map
 
     def _add_to_map(self, x: int, y: int, info: PointType):
         self._map[x + self._map_shift][y + self._map_shift] = info

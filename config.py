@@ -1,11 +1,10 @@
-import os
 import multiprocessing
 import time
 import json
 
 
 class ConfigManager:
-    def __init__(self, initial_config_file):
+    def __init__(self, initial_config_file: str):
         self._manager = multiprocessing.Manager()
         self._config = self._manager.dict(
             self._load_config(initial_config_file))
