@@ -73,9 +73,6 @@ class ZombieSpot(models.ZombieSpot):
         self.spawn_probability = 0.01
         self.frequency = 10
 
-        self.spawn_probability = 1
-        self.frequency = 1
-
         self._turns_to_spawn = 0
         self._max_probability = 1
 

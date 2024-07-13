@@ -29,7 +29,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 handler = logging.handlers.RotatingFileHandler(
-    f'logs/{start_time.strftime("%H-%M-%S")}.log', maxBytes=(1048576*5), backupCount=7,
+    f'logs/{start_time.strftime("%H-%M-%S")}.log', maxBytes=(1048576*50000000), backupCount=1,
 )
 formatter = logging.Formatter(
     '%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s')
@@ -125,7 +125,11 @@ def main():
         logger.info('Map updated')
 
         # Strategy here
-        base_center = game_map._base.blocks[game_map._base.head_key].point
+        try:
+            base_center = game_map._base.blocks[game_map._base.head_key].point
+        except KeyError:
+            base_center = [0, 0]
+
         attack = attacker.get_attack(game_map)
         build = builder.get_build(game_map)
         move_base = models.MoveBase(x=int(base_center[0]), y=int(base_center[1]))

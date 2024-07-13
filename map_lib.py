@@ -73,6 +73,7 @@ class Map():
 
     def get_base_center(self) -> npt.NDArray[np.int32]:
         if len(self._base.blocks) == 0:
+            # return np.array([0, 0])
             raise RuntimeError("We Died!")
 
         return np.array([block.point for _, block in self._base.blocks.items()]).mean(axis=1)
@@ -135,7 +136,7 @@ class Map():
         points = np.array(points)
         scales = np.round(
             (points.max(axis=0) + 1) * reserve_multiplier).astype(int)
-        static_map = np.zeros((scales[0], scales[1]))
+        static_map = np.zeros((scales[0] + 30, scales[1] + 30))
         for point_coord, point_type in zip(points, types):
             idxes = point_coord
             static_map[idxes[0]][idxes[1]] = point_type

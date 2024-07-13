@@ -8,9 +8,15 @@ import utils
 
 
 AGGRO_CONFIG = {
-    'zombie_aggro': 1,
-    'enemy_aggro': 3,
-    'enemy_head_aggro': 10,
+    'default_zombie_aggro': 1,
+    'enemy_aggro': 10,
+    'enemy_head_aggro': 50,
+    models.ZombieTypes.NORMAL: 1,
+    models.ZombieTypes.FAST: 2,
+    models.ZombieTypes.BOMBER: 5,
+    models.ZombieTypes.LINER: 5,
+    models.ZombieTypes.JUGGERNAUT: 4,
+    models.ZombieTypes.CHAOS_KNIGHT: 3,
 }
 
 

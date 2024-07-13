@@ -100,6 +100,8 @@ class EnemyBaseItem(BaseModel):
     x: int
     y: int
     isHead: bool = False
+    # name: str = dataclasses.field(default_factory=lambda: str(uuid.uuid1()))
+    # name: str = '111'
 
     def __post_init__(self):
         self.isHead = self.attack == 40
