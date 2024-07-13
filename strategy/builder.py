@@ -21,6 +21,7 @@ def _get_neighbours_count(game_map: map_lib.Map, x: int, y: int) -> int:
 
 
 def get_build(game_map: map_lib.Map) -> tp.List[models.Build]:
+    coins = game_map._info.gold
     build_command_ordered: tp.List[tp.Tuple[int, models.Build]] = []
 
     main_base = game_map._base.blocks[game_map._base.head_key]

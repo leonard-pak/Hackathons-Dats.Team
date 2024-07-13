@@ -14,6 +14,7 @@ import config
 import visualize
 from strategy import attacker
 from strategy import builder
+from strategy import move_base
 
 DTTM_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
 
@@ -123,6 +124,10 @@ def main():
 
         game_map.update()
         logger.info('Map updated')
+
+        coins = game_map._info.gold
+        turn = game_map._info.turn
+        logger.info(f'Current turn: {turn}. Current coins: {coins}')
 
         # Strategy here
         try:
