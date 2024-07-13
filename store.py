@@ -45,6 +45,17 @@ class Enemy:
     head_idx: int = 0
 
 
+@dataclass
+class Zombie:
+    attack: int
+    direction: m.ZombieDirection
+    health: int
+    speed: int
+    type: m.ZombieTypes
+    waitTurns: int
+    point: npt.NDArray[np.int32]
+
+
 class Store:
     def __init__(self, client: Client) -> None:
         self._client = client
@@ -94,7 +105,7 @@ class Store:
         return base
 
     def get_enemies(self):
-        enemies_dict = defaultdict(Enemy)
+        enemies_dict = defaultdict[str, Enemy]()
         for enemy_info in self._enemies:
             if enemy_info.isHead:
                 enemies_dict[enemy_info.name].head_idx = len(
@@ -106,3 +117,20 @@ class Store:
             ))
 
         return enemies_dict
+
+    def get_zombies(self):
+        zombies = dict[str, Zombie]()
+        for zombie_info in self._zombies:
+            if zombies.get(zombie_info.id) is not None:
+                raise RuntimeError('Одинаковые зомби в одном ответе')
+            zombies[zombie_info.id] = Zombie(
+                attack=zombie_info.attack,
+                direction=zombie_info.direction,
+                health=zombie_info.health,
+                speed=zombie_info.speed,
+                type=zombie_info.type,
+                waitTurns=zombie_info.waitTurns,
+                point=np.array([zombie_info.x, zombie_info.y]),
+            )
+
+        return zombies

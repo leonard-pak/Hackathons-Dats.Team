@@ -32,6 +32,7 @@ class Map():
     def update(self):
         self._base = self._store.get_base()
         self._enemies = self._store.get_enemies()
+        self._zombies = self._store.get_zombies()
         # TODO Дополучать всё остальное на карту
 
         self._map = self._build_map()
@@ -84,4 +85,9 @@ class Map():
             for idx, block_info in enumerate(enemy_base.blocks):
                 self._add_to_map(block_info.point[0], block_info.point[1],
                                  PointType.ENEMY_CAPITAL if idx == enemy_base.head_idx else PointType.ENEMY_BASE)
+
+        # Зомби
+        for zombie_info in self._zombies.values():
+            self._add_to_map(
+                zombie_info.point[0], zombie_info.point[1], PointType.ZOMBIE)
         return map
