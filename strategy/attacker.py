@@ -8,12 +8,10 @@ import models
 import utils
 
 
-fresh_config = config.ConfigManager('configs/config_v1.json').get_config()
-
 AGGRO_CONFIG = {
-    'zombie_aggro': fresh_config.get('zombie_aggro', 1),
-    'enemy_aggro': fresh_config.get('enemy_aggro', 1),
-    'enemy_head_aggro': fresh_config.get('enemy_head_aggro', 1),
+    'zombie_aggro': 1,
+    'enemy_aggro': 3,
+    'enemy_head_aggro': 10,
 }
 
 

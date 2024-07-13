@@ -1,6 +1,3 @@
 {
-    "map_reserve_multiplier": 1.3,
-    "zombie_aggro": 1,
-    "enemy_aggro": 3,
-    "enemy_head_aggro": 10
+    "map_reserve_multiplier": 1.3
 }
