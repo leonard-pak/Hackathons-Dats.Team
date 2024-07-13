@@ -80,23 +80,67 @@ class Map():
             # return np.array([0, 0])
             raise RuntimeError("We Died!")
 
-        count = 0
+        counter = 0
         total_x = 0
         total_y = 0
         for block in self._base.blocks.values():
             block_pos = block.point
             block_pos_x, block_pos_y = int(block_pos[0]), int(block_pos[1])
 
-            count += 1
+            counter += 1
             total_x += block_pos_x
             total_y += block_pos_y
 
-        return (round(total_x / count), round(total_y / count))
+        return (round(total_x / counter), round(total_y / counter))
 
     def get_nearest_spot(self):
         nearest_idx = np.array([np.abs(spot.point - self._init_point).sum()
                                 for spot in self._zombie_spots]).argmin()
         return self._zombie_spots[nearest_idx]
+
+    def calc_score2(self, x, y):
+        score = 0
+        tmp_x = x
+        while self.is_our_base(tmp_x, y):
+            score += 1
+            tmp_x += 1
+        tmp_x = x
+        while self.is_our_base(tmp_x, y):
+            score -= 1
+            tmp_x -= 1
+        tmp_y = y
+        while self.is_our_base(x, tmp_y):
+            score += 1
+            tmp_y += 1
+        tmp_y = y
+        while self.is_our_base(x, tmp_y):
+            score -= 1
+            tmp_y -= 1
+        return score
+
+    def find_save_point3(self):
+        damage_map = np.zeros(np.shape(self._map))
+        for zombie in self._zombies.values():
+            points = z.DAMAGE_BY_ZOMBIE_TYPE[zombie.type](zombie)
+            for point in points:
+                damage_map[point[0]][point[1]] += zombie.attack * 100
+
+        min_damage = 1e10
+        min_x = 0
+        min_y = 0
+        success = False
+
+        for x in range(np.shape(damage_map)[0]):
+            for y in range(np.shape(damage_map)[1]):
+                if self.is_our_base(x, y):
+                    damage_map[point[0]][point[1]] += self.calc_score2(x, y)
+                    if damage_map[point[0]][point[1]] < min_damage:
+                        min_damage = damage_map[point[0]][point[1]]
+                        min_x = x
+                        min_y = y
+                        success = True
+
+        return (min_x, min_y) if success else None
 
     def get_neighbours_count(self, x: int, y: int) -> int:
         counter = 0
@@ -156,8 +200,31 @@ class Map():
 
         for i in range(np.shape(damage_map)[0]):
             for j in range(np.shape(damage_map)[1]):
-                dist = abs(center_x - i) + abs(center_y - i)
-                damage_map[i][j] += dist * 5
+                x_coords = [
+                    min(i+3, np.shape(self._map)[0] - 1),
+                    min(i+2, np.shape(self._map)[0] - 1),
+                    min(i+1, np.shape(self._map)[0] - 1),
+                    i,
+                    max(i-1, 0),
+                    max(i-2, 0),
+                    max(i-3, 0),
+                ]
+                y_coords = [
+                    min(j+3, np.shape(self._map)[1] - 1),
+                    min(j+2, np.shape(self._map)[1] - 1),
+                    min(j+1, np.shape(self._map)[1] - 1),
+                    j,
+                    max(j-1, 0),
+                    max(j-2, 0),
+                    max(j-3, 0),
+                ]
+                value = sum(
+                    self._map[x][y] in self.OUR_GROUP
+                    for x, y in itertools.product(x_coords, y_coords)
+                )
+                damage_map[i][j] -= value
+                # dist = abs(center_x - i) + abs(center_y - i)
+                # damage_map[i][j] += dist * 5
 
         min_damage = 1e10
         min_x = 0
@@ -165,55 +232,41 @@ class Map():
         success = False
         for i in range(np.shape(damage_map)[0]):
             for j in range(np.shape(damage_map)[1]):
-                if self.is_our_base(i, j) and damage_map[i][j] < min_damage:
-                    min_damage = damage_map[i][j]
+                x_coords = [
+                    min(i+5, np.shape(self._map)[0] - 1),
+                    min(i+4, np.shape(self._map)[0] - 1),
+                    min(i+3, np.shape(self._map)[0] - 1),
+                    min(i+2, np.shape(self._map)[0] - 1),
+                    min(i+1, np.shape(self._map)[0] - 1),
+                    i,
+                    max(i-1, 0),
+                    max(i-2, 0),
+                    max(i-3, 0),
+                    max(i-4, 0),
+                    max(i-5, 0),
+                ]
+                y_coords = [
+                    min(j+5, np.shape(self._map)[1] - 1),
+                    min(j+4, np.shape(self._map)[1] - 1),
+                    min(j+3, np.shape(self._map)[1] - 1),
+                    min(j+2, np.shape(self._map)[1] - 1),
+                    min(j+1, np.shape(self._map)[1] - 1),
+                    j,
+                    max(j-1, 0),
+                    max(j-2, 0),
+                    max(j-3, 0),
+                    max(j-4, 0),
+                    max(j-5, 0),
+                ]
+                value = sum(
+                    self._map[x][y] in self.OUR_GROUP
+                    for x, y in itertools.product(x_coords, y_coords)
+                )
+                if self.is_our_base(i, j) and damage_map[i][j] - value < min_damage:
+                    min_damage = damage_map[i][j] - value
                     min_x = i
                     min_y = j
                     success = True
-
-        return (min_x, min_y) if success else None
-
-    def calc_score2(self, x, y):
-        score = 0
-        tmp_x = x
-        while self.is_our_base(tmp_x, y):
-            score += 1
-            tmp_x += 1
-        tmp_x = x
-        while self.is_our_base(tmp_x, y):
-            score -= 1
-            tmp_x -= 1
-        tmp_y = y
-        while self.is_our_base(x, tmp_y):
-            score += 1
-            tmp_y += 1
-        tmp_y = y
-        while self.is_our_base(x, tmp_y):
-            score -= 1
-            tmp_y -= 1
-        return score
-
-    def find_save_point3(self):
-        damage_map = np.zeros(np.shape(self._map))
-        for zombie in self._zombies.values():
-            points = z.DAMAGE_BY_ZOMBIE_TYPE[zombie.type](zombie)
-            for point in points:
-                damage_map[point[0]][point[1]] += zombie.attack
-
-        min_damage = 1e10
-        max_score = 0
-        min_x = 0
-        min_y = 0
-        success = False
-        for x in range(np.shape(damage_map)[0]):
-            for y in range(np.shape(damage_map)[1]):
-                if self.is_our_base(x, y) and damage_map[x][y] == 0:
-                    score = self.calc_score2(x, y)
-                    if score > max_score:
-                        max_score = score
-                        min_x = x
-                        min_y = y
-                        success = True
 
         return (min_x, min_y) if success else None
 

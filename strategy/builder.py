@@ -60,7 +60,7 @@ def get_build(game_map: map_lib.Map) -> tp.List[models.Build]:
         if (item.point.x, item.point.y) in used_set:
             continue
 
-        if turn < 175 and game_map._map[item.point.x, item.point.y] != map_lib.PointType.EMPTY.value:
+        if game_map._map[item.point.x, item.point.y] != map_lib.PointType.EMPTY.value:
             used_set.add((item.point.x, item.point.y))
             continue
 
