@@ -23,11 +23,11 @@ class Map():
         self._zombie_spots = self._store.get_spots()
         self._walls = self._store.get_walls()
 
-        self._static_map, self._map_shift = self._build_static_map(
-            reserve_multiplier=reserve_multiplier)
+        self._static_map = self._build_static_map(
+            reserve_multiplier=reserve_multiplier
+        )
 
         self.update()
-        # self._init_point = self.get_base_center()
 
     def update(self):
         self._store.sync()
@@ -36,21 +36,22 @@ class Map():
         self._zombies = self._store.get_zombies()
         # TODO Дополучать всё остальное на карту
 
+        self._init_point = self.get_base_center()
         self._map = self._build_map()
 
     def get_map(self):
         return self._map
 
-    def _add_to_map(self, x: int, y: int, info: PointType):
-        self._map[x + self._map_shift][y + self._map_shift] = info
-
     def get_base_center(self) -> npt.NDArray[np.int32]:
+        if len(self._base.blocks) == 0:
+            raise RuntimeError("We Died!")
+
         return np.array([block.point for _, block in self._base.blocks.items()]).mean(axis=1)
 
-    # def get_nearest_spot(self):
-    #     nearest_idx = np.array([np.abs(spot.point - self._init_point).sum()
-    #                             for spot in self._zombie_spots]).argmin()
-    #     return self._zombie_spots[nearest_idx]
+    def get_nearest_spot(self):
+        nearest_idx = np.array([np.abs(spot.point - self._init_point).sum()
+                                for spot in self._zombie_spots]).argmin()
+        return self._zombie_spots[nearest_idx]
 
     def is_point_available(self, x: int, y: int):
         # TODO проверять в соотвествие с правилами
@@ -66,34 +67,27 @@ class Map():
             points.append(wall.point)
             types.append(PointType.WALL)
         points = np.array(points)
-        max_x_y: npt.NDArray[np.int32] = points.max(axis=0)
-        min_x_y: npt.NDArray[np.int32] = points.min(axis=0)
-        scales = (max_x_y - min_x_y) * reserve_multiplier
-        map_idx_shifts = (scales - max_x_y - min_x_y) / 2
-        # TODO В какую сторону лучше округлять? Уже засыпаю
-        map_idx_shifts = np.round(map_idx_shifts).astype(int)
-        map_idx_shifts = np.array([0, 0])
+        scales = np.round(
+            (points.max(axis=0) + 1) * reserve_multiplier).astype(int)
         static_map = np.zeros((scales[0], scales[1]))
-        static_map = np.zeros((30, 30))
         for point_coord, point_type in zip(points, types):
-            idxes = point_coord + map_idx_shifts
+            idxes = point_coord
             static_map[idxes[0]][idxes[1]] = point_type
-        return static_map, map_idx_shifts
+        return static_map
 
     def _build_map(self):
         map = copy.deepcopy(self._static_map)
         # Наша база
         for block_id, block_info in self._base.blocks.items():
-            self._add_to_map(block_info.point[0], block_info.point[1],
-                             PointType.MY_CAPITAL if block_id == self._base.head_key else PointType.MY_BASE)
+            map[block_info.point[0]][block_info.point[1]
+                                     ] = PointType.MY_CAPITAL if block_id == self._base.head_key else PointType.MY_BASE
         # Базы врагов
         for enemy_base in self._enemies.values():
             for idx, block_info in enumerate(enemy_base.blocks):
-                self._add_to_map(block_info.point[0], block_info.point[1],
-                                 PointType.ENEMY_CAPITAL if idx == enemy_base.head_idx else PointType.ENEMY_BASE)
+                map[block_info.point[0]][block_info.point[1]
+                                         ] = PointType.ENEMY_CAPITAL if idx == enemy_base.head_idx else PointType.ENEMY_BASE
 
         # Зомби
         for zombie_info in self._zombies.values():
-            self._add_to_map(
-                zombie_info.point[0], zombie_info.point[1], PointType.ZOMBIE)
+            map[zombie_info.point[0]][zombie_info.point[1]] = PointType.ZOMBIE
         return map
