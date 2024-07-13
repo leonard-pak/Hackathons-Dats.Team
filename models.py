@@ -35,15 +35,36 @@ class Attack(BaseModel):
     blockId: str
     target: Point
 
+    def to_record(self) -> tp.Dict:
+        return {
+            'blockId': self.blockId,
+            'target': {
+                'x': self.target.x,
+                'y': self.target.y,
+            }
+        }
+
 
 @dataclasses.dataclass
 class Build(BaseModel):
     point: Point
 
+    def to_record(self) -> tp.Dict:
+        return {
+            'x': self.point.x,
+            'y': self.point.y,
+        }
+
 
 @dataclasses.dataclass
 class MoveBase(Point):
     ...
+
+    def to_record(self) -> tp.Dict:
+        return {
+            'x': self.x,
+            'y': self.y,
+        }
 
 
 @dataclasses.dataclass

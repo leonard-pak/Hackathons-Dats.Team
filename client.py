@@ -58,9 +58,9 @@ class Client():
         uri = '/play/zombidef/command'
         url = self._host + uri
         body = {
-            'attack': attack,
-            'build': build,
-            'moveBase': move_base,
+            'attack': [item.to_record() for item in attack],
+            'build': [item.to_record() for item in build],
+            'moveBase': move_base.to_record(),
         }
         response = self._request(Method.POST, url=url, payload=body)
         return json.loads(response.text)
