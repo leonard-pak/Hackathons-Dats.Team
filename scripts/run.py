@@ -14,7 +14,7 @@ import config
 import visualize
 from strategy import attacker
 from strategy import builder
-from strategy import move_base
+from strategy import base_mover
 
 DTTM_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
 
@@ -130,18 +130,13 @@ def main():
         logger.info(f'Current turn: {turn}. Current coins: {coins}')
 
         # Strategy here
-        try:
-            base_center = game_map._base.blocks[game_map._base.head_key].point
-        except KeyError:
-            base_center = [0, 0]
-
         attack = attacker.get_attack(game_map)
         build = builder.get_build(game_map)
-        move_base = models.MoveBase(x=int(base_center[0]), y=int(base_center[1]))
+        move_base = base_mover.get_move_base(game_map)
         logger.info('Strategy calculated')
 
         response = game_client.post_commands(attack, build, move_base)
-        logger.info('Strategy sent')
+        logger.info(f'Strategy sent for turn: {cur_turn}')
 
         # Visualization
         visualize.visualize_map(game_map=game_map.get_visible_map())

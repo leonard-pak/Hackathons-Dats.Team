@@ -105,7 +105,7 @@ class Map():
         i = damage_map.argmax()
         return i // np.shape(damage_map)[0], i % np.shape(damage_map)[0]
 
-    def is_point_available_to_build(self, x: int, y: int):
+    def is_point_available_to_build(self, x: int, y: int, turn: int = 1, turn_break: int = 50):
         # В отрицательную зону нельзя
         if x < 0 or y < 0:
             return False
@@ -129,12 +129,45 @@ class Map():
             for x, y in itertools.product(x_coords, y_coords)
         ):
             return False
+        if turn > turn_break:
+            x_coords = [
+                # min(x+5, np.shape(self.__map)[0]),
+                # min(x+4, np.shape(self.__map)[0]),
+                min(x+3, np.shape(self.__map)[0]),
+                min(x+2, np.shape(self.__map)[0]),
+                min(x+1, np.shape(self.__map)[0]),
+                max(x-1, 0),
+                max(x-2, 0),
+                max(x-3, 0),
+                # max(x-4, 0),
+                # max(x-5, 0),
+            ]
+            y_coords = [
+                # min(y+5, np.shape(self.__map)[1]),
+                min(y+4, np.shape(self.__map)[1]),
+                min(y+3, np.shape(self.__map)[1]),
+                min(y+2, np.shape(self.__map)[1]),
+                min(y+1, np.shape(self.__map)[1]),
+                max(y-1, 0),
+                max(y-2, 0),
+                max(y-3, 0),
+                max(y-4, 0),
+                # max(y-5, 0),
+            ]
         # Не прижаты к споту
         if any(
             self.__map[x][y] == PointType.ZOMBIE_SPAWN
             for x, y in itertools.product(x_coords, y_coords)
         ):
             return False
+        x_coords = [
+            min(x+1, np.shape(self.__map)[0]),
+            max(x-1, 0),
+        ]
+        y_coords = [
+            min(y+1, np.shape(self.__map)[1]),
+            max(y-1, 0),
+        ]
         # Далеко от врагов
         x_coords.append(x)
         y_coords.append(y)
@@ -148,8 +181,6 @@ class Map():
 
     def is_our_base(self, x: int, y: int):
         return self.__map[x][y] in self.OUR_GROUP
-
-    def _predic
 
     def _build_static_map(self, reserve_multiplier: int):
         points = list[npt.NDArray[np.int32]]()

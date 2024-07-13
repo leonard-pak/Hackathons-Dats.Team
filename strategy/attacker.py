@@ -9,43 +9,48 @@ import utils
 
 AGGRO_CONFIG = {
     'default_zombie_aggro': 1,
-    'enemy_aggro': 10,
+    'enemy_aggro': -10,
     'enemy_head_aggro': 50,
     models.ZombieTypes.NORMAL: 1,
     models.ZombieTypes.FAST: 2,
-    models.ZombieTypes.BOMBER: 5,
-    models.ZombieTypes.LINER: 5,
-    models.ZombieTypes.JUGGERNAUT: 4,
-    models.ZombieTypes.CHAOS_KNIGHT: 3,
+    models.ZombieTypes.BOMBER: 100,
+    models.ZombieTypes.LINER: 500,
+    models.ZombieTypes.JUGGERNAUT: 40,
+    models.ZombieTypes.CHAOS_KNIGHT: 75,
 }
 
 
-def _add_attack_target(attack_targets: tp.Dict, target_pos: tp.Tuple[int, int], target_health: int, aggro: int = 1):
+def _add_attack_target(attack_targets: tp.Dict, target_pos: tp.Tuple[int, int], target_health: int, aggro: int = 1, distance: int = 0):
     if target_pos in attack_targets:
         prev_state = attack_targets[target_pos]
         attack_targets[target_pos] = (
-            prev_state[0] + aggro, max(prev_state[1], target_health))
+            prev_state[0] + aggro + distance, max(prev_state[1], target_health))
     else:
-        attack_targets[target_pos] = (aggro, target_health)
+        attack_targets[target_pos] = (aggro + distance, target_health)
 
 
 def _attack_targets(game_map: map_lib.Map) -> tp.Dict[tp.Tuple[int, int], tp.Tuple[int, int]]:
     # returns Dict[pos[x, y]: [target_count, max_hp]]
     attack_targets = {}
 
+    main_base = game_map._base.blocks[game_map._base.head_key]
+    main_base_pos = main_base.point
+
     for zombie in game_map._zombies.values():
         zombie_pos = zombie.point
+        distance = abs(int(utils.calc_range(main_base_pos, zombie_pos)))
         target_pos = (int(zombie_pos[0]), int(zombie_pos[1]))
         target_health = zombie.health
         _add_attack_target(attack_targets, target_pos,
-                           target_health, AGGRO_CONFIG['zombie_aggro'])
+                           target_health, AGGRO_CONFIG['default_zombie_aggro'], distance)
 
     for enemy_block in game_map._enemies:
         enemy_pos = enemy_block.point
+        distance = abs(int(utils.calc_range(main_base_pos, enemy_pos)))
         target_pos = (int(enemy_pos[0]), int(enemy_pos[1]))
         target_health = enemy_block.health
         aggro = AGGRO_CONFIG['enemy_head_aggro'] if enemy_block.attack == 40 else AGGRO_CONFIG['enemy_aggro']
-        _add_attack_target(attack_targets, target_pos, target_health, aggro)
+        _add_attack_target(attack_targets, target_pos, target_health, aggro, distance)
 
     return attack_targets
 
