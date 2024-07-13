@@ -21,14 +21,14 @@ def _attack_targets(game_map: map_lib.Map) -> tp.Dict[tp.Tuple[int, int], tp.Tup
 
     for zombie in game_map._zombies.values():
         zombie_pos = zombie.point
-        target_pos = (zombie_pos[0], zombie_pos[1])
+        target_pos = (int(zombie_pos[0]), int(zombie_pos[1]))
         target_health = zombie.health
         _add_attack_target(attack_targets, target_pos, target_health)
 
     for enemy_base in game_map._enemies.values():
         for enemy_block in enemy_base.blocks:
             enemy_pos = enemy_block.point
-            target_pos = (enemy_pos[0], enemy_pos[1])
+            target_pos = (int(enemy_pos[0]), int(enemy_pos[1]))
             target_health = enemy_block.health
             _add_attack_target(attack_targets, target_pos, target_health)
 
