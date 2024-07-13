@@ -3,6 +3,7 @@ import models as m
 from dataclasses import dataclass
 import numpy as np
 import numpy.typing as npt
+from collections import defaultdict
 
 
 @dataclass
@@ -17,7 +18,7 @@ class Wall:
 
 @dataclass
 class BaseBlock:
-    # last_atack, id, isHead не используются
+    # last_atack не используются
     point: npt.NDArray[np.int32]
     attack: int
     health: int
@@ -27,7 +28,21 @@ class BaseBlock:
 @dataclass
 class Base:
     blocks: dict[str, BaseBlock]  # key = id
-    head: str
+    head_key: str
+
+
+@dataclass
+class EnemyBlock:
+    # last_atack не используются
+    attack: int
+    health: int
+    point: npt.NDArray[np.int32]
+
+
+@dataclass
+class Enemy:
+    blocks: list[EnemyBlock] = []
+    head_idx: int = 0
 
 
 class Store:
@@ -46,7 +61,6 @@ class Store:
     def sync(self):
         turn_info = self._client.get_units()
         self._base = m.BaseItem.from_list_record(turn_info['base'])
-        # TODO не используется
         self._enemies = m.EnemyBaseItem.from_list_record(
             turn_info['enemyBlocks'])
         # TODO не используется
@@ -70,11 +84,25 @@ class Store:
         return [Wall(point=np.array([wall.x, wall.y])) for wall in self._walls]
 
     def get_base(self):
-        base = Base(blocks=dict(), head='')
+        base = Base(blocks=dict(), head_key='')
         for item in self._base:
             if item.isHead:
-                base.head = item.id
+                base.head_key = item.id
             base_block = BaseBlock(point=np.array(
                 [item.x, item.y]), attack=item.attack, health=item.health, distance=item.range)
             base.blocks[item.id] = base_block
         return base
+
+    def get_enemies(self):
+        enemies_dict = defaultdict(Enemy)
+        for enemy_info in self._enemies:
+            if enemy_info.isHead:
+                enemies_dict[enemy_info.name].head_idx = len(
+                    enemies_dict[enemy_info.name].blocks)
+            enemies_dict[enemy_info.name].blocks.append(EnemyBlock(
+                attack=enemy_info.attack,
+                health=enemy_info.health,
+                point=np.array([enemy_info.x, enemy_info.y])
+            ))
+
+        return enemies_dict

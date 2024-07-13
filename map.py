@@ -31,12 +31,10 @@ class Map():
 
     def update(self):
         self._base = self._store.get_base()
+        self._enemies = self._store.get_enemies()
         # TODO Дополучать всё остальное на карту
 
-        self._map = copy.deepcopy(self._static_map)
-        for block_id, block_info in self._base.blocks.items():
-            self._add_to_map(block_info.point[0], block_info.point[1],
-                             PointType.MY_CAPITAL if block_id == self._base.head else PointType.MY_BASE)
+        self._map = self._build_map()
 
     def _add_to_map(self, x: int, y: int, info: PointType):
         self._map[x + self._map_shift][y + self._map_shift] = info
@@ -74,3 +72,16 @@ class Map():
             idxes = point_coord + map_idx_shifts
             static_map[idxes[0]][idxes[1]] = point_type
         return static_map, map_idx_shifts
+
+    def _build_map(self):
+        map = copy.deepcopy(self._static_map)
+        # Наша база
+        for block_id, block_info in self._base.blocks.items():
+            self._add_to_map(block_info.point[0], block_info.point[1],
+                             PointType.MY_CAPITAL if block_id == self._base.head_key else PointType.MY_BASE)
+        # Базы врагов
+        for enemy_base in self._enemies.values():
+            for idx, block_info in enumerate(enemy_base.blocks):
+                self._add_to_map(block_info.point[0], block_info.point[1],
+                                 PointType.ENEMY_CAPITAL if idx == enemy_base.head_idx else PointType.ENEMY_BASE)
+        return map
