@@ -2,7 +2,6 @@ import typing as tp
 
 import numpy as np
 
-import config
 import map_lib
 import models
 import utils
